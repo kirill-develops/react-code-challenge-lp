@@ -1,0 +1,13 @@
+@use './variables'as*;
+
+@mixin padding-small {
+  padding: $padding-small $padding-medium;
+}
+
+@mixin padding-medium {
+  padding: $padding-medium $padding-large;
+}
+
+@mixin padding-large {
+  padding: $padding-large $padding-xl;
+}
