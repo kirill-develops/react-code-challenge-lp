@@ -1,0 +1,31 @@
+@use '../../styles/mixins'as*;
+@use '../../styles/variables'as*;
+
+.nav {
+  @include padding-large;
+  background-color: #0a0a0a;
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: $padding-large;
+
+  &__button {
+    @include padding-medium;
+    border: 1.5px solid white;
+    border-radius: $brdr-radius-large;
+    color: white;
+    text-transform: uppercase;
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    &--active {
+      @extend .nav__button;
+      color: gold;
+      border-color: gold;
+    }
+  }
+}
