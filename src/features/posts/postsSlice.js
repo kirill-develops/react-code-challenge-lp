@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchPosts } from "./postsActions";
-
 
 const initialState = {
   posts: [],
@@ -23,12 +21,15 @@ export const postSlice = createSlice({
       }
       state.postById = (action.payload);
     },
+    setErr: (state, action) => {
+      state.error = action.payload
+    },
  }
 })
 export default postSlice.reducer;
 
 
-export const { setAllPost, setPost } = postSlice.actions;
+export const { setAllPost, setPost, setErr } = postSlice.actions;
 
 
 export const getAllPosts = state => state.posts.posts;
