@@ -1,0 +1,29 @@
+@use '../../styles/variables'as*;
+@use '../../styles/mixins'as*;
+
+.new-post {
+  @include padding-medium;
+  background-color: beige;
+  border-radius: $brdr-radius-large;
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.772);
+    backdrop-filter: blur(10px);
+    padding: 8rem 15rem;
+  }
+
+  &__form {
+    @include padding-small;
+    display: flex;
+    flex-direction: column;
+    gap: $padding-medium;
+  }
+
+  &__button {
+    margin: auto;
+  }
+}
