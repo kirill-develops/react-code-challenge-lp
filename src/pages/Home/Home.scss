@@ -1,13 +1,14 @@
 @use '../../styles/mixins'as*;
 @use '../../styles/variables'as*;
 
-.search-wrapper {
-  @include padding-medium;
-  padding-bottom: 0;
-  width: 100%;
+.home-page {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+  gap: $padding-medium;
+  overflow-y: hidden;
+  height: 100%;
 }
 
 .card-deck {

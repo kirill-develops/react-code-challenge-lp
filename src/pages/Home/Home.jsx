@@ -1,22 +1,16 @@
 import './Home.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { getAllPosts, getOne } from '../../features/posts/postsSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts, fetchPost } from '../../features/posts/postsActions';
+import { fetchPosts } from '../../features/posts/postsActions';
+import SearchBar from '../../components/SearchBar/SearchBar';
+import { AddPostForm } from '../../components/AddPostForm/AddPostForm';
 
 const Home = () => {
   // localized dispatch caller of useDispatch hook
   const dispatch = useDispatch();
 
-  // search state & redux variable
-  const [search, setSearch] = useState('');
   const postSearched = useSelector(getOne);
-
-  // when the search state changes, dispatch fetchPost with the search state as
-  // a paramater
-  useEffect(() => {
-    dispatch(fetchPost(search))
-  }, [search, dispatch])
 
   // allPosts, postStatus & error copied from the posts slice in Redux
   const allPosts = useSelector(getAllPosts);
@@ -25,9 +19,7 @@ const Home = () => {
 
   // when the page first loads, dispatch fetchPosts to populate our posts Redux state
   useEffect(() => {
-    if (postStatus === 'idle') {
-      dispatch(fetchPosts())
-    }
+    if (postStatus === 'idle') dispatch(fetchPosts())
   }, [postStatus, dispatch])
 
   // create content variable to transform based on API responses
@@ -35,7 +27,8 @@ const Home = () => {
 
   if (postStatus === 'loading') {
     content = <h1>Loading...</h1>;
-  } else if (postStatus === 'succeeded') {
+  }
+  else if (postStatus === 'succeeded') {
     content = allPosts.slice()
       .map(post =>
         <div
@@ -48,25 +41,21 @@ const Home = () => {
           <p className='card__body'>{post.body}</p>
           <p className='card__label'>post id number:{post.id}</p>
         </div>);
-  } else if (postStatus === 'failed') {
+  }
+  else if (postStatus === 'failed') {
     content = <div>{error}</div>
   }
 
   // if API req responds with a 404, produce an error
   if (postSearched === 404) {
     content = (
-      <div
-        className='card'
-      >
+      <div className='card'>
         <h2>No such ID</h2>
       </div>
     )
   } else if (postSearched.id) {
     content = (
-      <div
-        key={postSearched.id}
-        className='card'
-      >
+      <div className='card'>
         <h1 className='card__title'>
           {postSearched.title}
         </h1>
@@ -77,16 +66,8 @@ const Home = () => {
   }
 
   return (
-    <div>
-      <section className='search-wrapper'>
-        <input
-          type='search'
-          value={search}
-          placeholder="search by ID..."
-          onChange={(e) => setSearch(e.target.value)}
-          className=''
-        />
-      </section>
+    <div className='home-page'>
+      <SearchBar />
       <div className='card-deck'>
         {content}
       </div>
