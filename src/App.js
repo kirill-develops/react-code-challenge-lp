@@ -23,7 +23,6 @@ function App() {
           element={(<PostalLookup />)}
         />
       </Routes>
-      Hello World!
     </div>
   );
 };
