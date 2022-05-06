@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setAllPost, setPost } from "./postsSlice";
+import { setErr, setAllPost, setPost } from "./postsSlice";
 
 // base server address variable for readability
 const SERVER_URL = 'https://jsonplaceholder.typicode.com/';
@@ -16,7 +16,7 @@ export function fetchPosts() {
   return function (dispatch) {
     axios(getAll)
       .then(({ data }) => dispatch(setAllPost(data)))
-      .catch(err => dispatch(setAllPost(err)))
+      .catch(({response}) => dispatch(setPost(response.status)))
   }
 }
 
@@ -36,4 +36,30 @@ export function fetchPost(search) {
       .catch(({response}) => dispatch(setPost(response.status)))
     else dispatch(setPost({}))
   }
+};
+
+// 
+const addPostObj = (postData) => ({
+  baseURL: SERVER_URL,
+  method: 'post',
+  url: '/posts',
+  data: postData,
+});
+
+
+export function addPost(postData) {
+  return function (dispatch) {
+    if (String(postData.body)
+      && String(postData.title)
+      && Number(postData.userId))
+      axios(addPostObj(postData))
+        .then((res) => {
+          if (res.status === 200 || res.status === 201) {
+            dispatch(fetchPosts());
+          } else {
+            dispatch(setErr(res.status))
+          }
+        })
+        .catch(({ res }) => dispatch(setErr(res.status)))
+  };
 };
