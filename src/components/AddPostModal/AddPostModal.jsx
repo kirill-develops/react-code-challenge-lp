@@ -48,6 +48,7 @@ const AddPostModal = () => {
             name="postContent"
             value={content}
             onChange={e => setContent(e.target.value)}
+            className='new-post__input--large'
           />
           <button
             type="submit"
