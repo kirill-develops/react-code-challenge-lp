@@ -36,14 +36,12 @@ export function fetchPost(search) {
   }
 };
 
-// 
 const addPostObj = (postData) => ({
   baseURL: SERVER_URL,
   method: 'post',
   url: '/posts',
   data: postData,
 });
-
 
 export function addPost(postData) {
   return function (dispatch) {
@@ -84,5 +82,25 @@ export function editPost(postId, postData) {
           }
         })
         .catch(({ res }) => dispatch(setErr(res.status)))
+  };
+};
+
+const deletePostObj = (id) => ({
+  baseURL: SERVER_URL,
+  method: 'delete',
+  url: `/posts/${id}`,
+});
+
+export function deletePost(postId) {
+  return function (dispatch) {
+      axios(deletePostObj(postId))
+        .then((res) => {
+          if (res.status === 200 || res.status === 201) {
+            dispatch(fetchPosts());
+          } else {
+            dispatch(setErr(res.status))
+          }
+        })
+        .catch(({ res }) => dispatch(setErr(res)))
   };
 };
