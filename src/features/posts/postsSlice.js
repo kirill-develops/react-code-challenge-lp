@@ -21,6 +21,18 @@ export const postSlice = createSlice({
     setErr: (state, action) => {
       state.error = action.payload
     },
+    postAdded: (state, action) => {
+      state.posts.push(action.payload)
+    },
+    postEditted: (state, action) => {
+      const { id, title, body } = action.payload;
+      const exsistingPost = state.posts.find(post => post.id === id);
+
+      if (exsistingPost) {
+        exsistingPost.title = title;
+        exsistingPost.body = body;
+      }
+    }
  },
  extraReducers(builder) {
     builder
@@ -41,7 +53,7 @@ export const postSlice = createSlice({
 export default postSlice.reducer;
 
 
-export const { setAllPost, setPost, setErr } = postSlice.actions;
+export const { setPost, setErr, postAdded, postEditted } = postSlice.actions;
 
 
 export const getAllPosts = state => state.posts.posts;
