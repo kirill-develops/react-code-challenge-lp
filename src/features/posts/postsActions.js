@@ -1,5 +1,6 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { setErr, setAllPost, setPost } from "./postsSlice";
+import { setErr, setPost } from "./postsSlice";
 
 // base server address variable for readability
 const SERVER_URL = 'https://jsonplaceholder.typicode.com/';
@@ -12,13 +13,10 @@ const getAll = {
 }
 
 // Thunk function making Axios API REQ to Get All posts
-export function fetchPosts() {
-  return function (dispatch) {
-    axios(getAll)
-      .then(({ data }) => dispatch(setAllPost(data)))
-      .catch(({response}) => dispatch(setPost(response.status)))
-  }
-}
+export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
+  const response = await axios(getAll)
+  return response.data
+});
 
 // Axios request function returning details for specific post by provided id
 const getOne = (id) => ({

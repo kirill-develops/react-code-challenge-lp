@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchPosts } from "./postsActions";
 
 const initialState = {
   posts: [],
@@ -11,10 +12,6 @@ export const postSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    setAllPost: (state, action) => {
-      state.posts = (action.payload);
-      state.status = 'succeeded'
-    },
     setPost: (state, action) => {
       if (action.payload === 404) {
         state.postById = 'No such Id';
@@ -24,7 +21,22 @@ export const postSlice = createSlice({
     setErr: (state, action) => {
       state.error = action.payload
     },
- }
+ },
+ extraReducers(builder) {
+    builder
+      .addCase(fetchPosts.pending, (state, action) => {
+        state.status = 'loading'
+      })
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        // Add any fetched posts to the array
+        state.posts = action.payload
+      })
+      .addCase(fetchPosts.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message
+      })
+  },
 })
 export default postSlice.reducer;
 
@@ -37,5 +49,5 @@ export const getOne = state => state.posts.postById;
 
 // Alternative method not requested but optional for better performance. Trade
 // off, server data may have already been deleted while client is interacting
-// with old data.
+// with state data.
 export const getPostById = (state, postId) => state.posts.posts.find(post => post.id === postId);
