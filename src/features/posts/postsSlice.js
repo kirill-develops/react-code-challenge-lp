@@ -22,7 +22,7 @@ export const postSlice = createSlice({
       state.error = action.payload
     },
     postAdded: (state, action) => {
-      state.posts.push(action.payload)
+      state.posts.unshift(action.payload)
     },
     postEditted: (state, action) => {
       const { id, title, body } = action.payload;
@@ -32,6 +32,11 @@ export const postSlice = createSlice({
         exsistingPost.title = title;
         exsistingPost.body = body;
       }
+    },
+    postDeleted: (state, action) => {
+      const remaingPosts = state.posts.filter(post => post.id !== action.payload);
+
+      state.posts = remaingPosts;
     }
  },
  extraReducers(builder) {
@@ -42,7 +47,7 @@ export const postSlice = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = 'succeeded'
         // Add any fetched posts to the array
-        state.posts = action.payload
+        state.posts = action.payload.sort((a,b)=> b.id - a.id)
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = 'failed'
@@ -53,7 +58,7 @@ export const postSlice = createSlice({
 export default postSlice.reducer;
 
 
-export const { setPost, setErr, postAdded, postEditted } = postSlice.actions;
+export const { setPost, setErr, postAdded, postEditted, postDeleted } = postSlice.actions;
 
 
 export const getAllPosts = state => state.posts.posts;

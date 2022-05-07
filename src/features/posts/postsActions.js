@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { postAdded, postEditted, setErr, setPost } from "./postsSlice";
+import { postAdded, postDeleted, postEditted, setErr, setPost } from "./postsSlice";
 
 // base server address variable for readability
 const SERVER_URL = 'https://jsonplaceholder.typicode.com/';
@@ -97,7 +97,7 @@ export function deletePost(postId) {
       axios(deletePostObj(postId))
         .then((res) => {
           if (res.status === 200 || res.status === 201) {
-            dispatch(fetchPosts());
+            dispatch(postDeleted(postId));
           } else {
             dispatch(setErr(res.status))
           }
