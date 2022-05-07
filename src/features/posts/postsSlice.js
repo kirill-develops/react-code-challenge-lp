@@ -24,7 +24,7 @@ export const postSlice = createSlice({
  },
  extraReducers(builder) {
     builder
-      .addCase(fetchPosts.pending, (state, action) => {
+      .addCase(fetchPosts.pending, (state, _action) => {
         state.status = 'loading'
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {

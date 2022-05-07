@@ -61,3 +61,28 @@ export function addPost(postData) {
         .catch(({ res }) => dispatch(setErr(res.status)))
   };
 };
+
+const editPostObj = (postId, postData) => ({
+  baseURL: SERVER_URL,
+  method: 'put',
+  url: `/posts/${postId}`,
+  data: postData,
+});
+
+export function editPost(postId, postData) {
+  return function (dispatch) {
+    if (String(postData.body)
+      && String(postData.title)
+      && Number(postData.userId)
+      && Number(postData.id === postId))
+      axios(editPostObj(postId, postData))
+        .then((res) => {
+          if (res.status === 200 || res.status === 201) {
+            dispatch(fetchPosts());
+          } else {
+            dispatch(setErr(res.status))
+          }
+        })
+        .catch(({ res }) => dispatch(setErr(res.status)))
+  };
+};
