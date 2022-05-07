@@ -1,7 +1,7 @@
 @use '../../styles/variables'as*;
 @use '../../styles/mixins'as*;
 
-.new-post {
+.edit-post {
   @include padding-medium;
   background-color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(25px);
@@ -34,7 +34,7 @@
   &__input {
 
     &--large {
-      @extend .new-post__input;
+      @extend .edit-post__input;
       resize: none;
     }
   }
