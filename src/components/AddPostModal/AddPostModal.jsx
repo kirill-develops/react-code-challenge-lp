@@ -23,6 +23,9 @@ const AddPostModal = () => {
         userId: nanoid(),
       };
       dispatch(addPost(postObj));
+      setTitle('');
+      setContent('');
+      toggleNewPost();
     }
   }
 
