@@ -6,6 +6,7 @@ import { getAllPosts, getOne } from '../../features/posts/postsSlice';
 import { fetchPosts } from '../../features/posts/postsActions';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AddPostModal from '../../components/AddPostModal/AddPostModal';
+import PostInteractions from '../../components/PostInteractions/PostInteractions';
 
 const Home = () => {
   // localized dispatch caller of useDispatch hook
@@ -60,6 +61,7 @@ const Home = () => {
           <p className='card__body'>
             {post.body}
           </p>
+          <PostInteractions post={post} />
           <p className='card__label'>
             post id number:{post.id}
           </p>
