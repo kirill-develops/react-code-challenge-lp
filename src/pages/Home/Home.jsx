@@ -27,34 +27,10 @@ const Home = () => {
   let content;
 
   if (postStatus === 'loading') {
-    content = <h1>Loading...</h1>;
-  }
-  else if (postStatus === 'succeeded') {
-    content = allPosts.slice()
-      .map(post =>
-        <div
-          key={post.id}
-          className='card'
-        >
-          <h1 className='card__title'>
-            {post.title}
-          </h1>
-          <p className='card__body'>
-            {post.body}
-          </p>
-          <p className='card__label'>
-            post id number:{post.id}
-          </p>
-        </div>
-      );
-  }
-  else if (postStatus === 'failed') {
-    content = <div>{error}</div>
-  }
-
-  // if API req responds with a 404, produce an error, if response exsists via
-  // id check, then populate content var with jsx elements with postSearched Data
-  if (postSearchedFor === 404) {
+    content = (
+      <h1>Loading...</h1>
+    )
+  } else if (postSearchedFor === 404) {
     content = (
       <div className='card'>
         <h2>No such ID</h2>
@@ -74,7 +50,29 @@ const Home = () => {
         </p>
       </div>
     )
+  } else if (postStatus === 'succeeded') {
+    content = allPosts.slice()
+      .map(post =>
+        <div key={post.id} className='card'>
+          <h1 className='card__title'>
+            {post.title}
+          </h1>
+          <p className='card__body'>
+            {post.body}
+          </p>
+          <p className='card__label'>
+            post id number:{post.id}
+          </p>
+        </div>
+      );
   }
+  else if (postStatus === 'failed') {
+    content = <div>{error}</div>
+  }
+
+  // if API req responds with a 404, produce an error, if response exsists via
+  // id check, then populate content var with jsx elements with postSearched Data
+
 
   return (
     <div className='home-page'>
