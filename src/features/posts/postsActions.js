@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { setErr, setPost } from "./postsSlice";
+import { postAdded, postEditted, setErr, setPost } from "./postsSlice";
 
 // base server address variable for readability
 const SERVER_URL = 'https://jsonplaceholder.typicode.com/';
@@ -51,7 +51,8 @@ export function addPost(postData) {
       axios(addPostObj(postData))
         .then((res) => {
           if (res.status === 200 || res.status === 201) {
-            dispatch(fetchPosts());
+            console.log(res.data)
+            dispatch(postAdded(res.data));
           } else {
             dispatch(setErr(res.status))
           }
@@ -76,7 +77,7 @@ export function editPost(postId, postData) {
       axios(editPostObj(postId, postData))
         .then((res) => {
           if (res.status === 200 || res.status === 201) {
-            dispatch(fetchPosts());
+            dispatch(postEditted(res.data));
           } else {
             dispatch(setErr(res.status))
           }

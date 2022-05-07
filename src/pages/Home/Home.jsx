@@ -72,10 +72,6 @@ const Home = () => {
     content = <div>{error}</div>
   }
 
-  // if API req responds with a 404, produce an error, if response exsists via
-  // id check, then populate content var with jsx elements with postSearched Data
-
-
   return (
     <div className='home-page'>
       <SearchBar />
