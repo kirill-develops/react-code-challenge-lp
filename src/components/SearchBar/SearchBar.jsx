@@ -1,9 +1,8 @@
 import './SearchBar.scss';
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { fetchPost } from '../../features/posts/postsActions';
 
-const SearchBar = () => {
+const SearchBar = ({ reduxAction, placeholder }) => {
   // search state & redux variable
   const [search, setSearch] = useState('');
 
@@ -12,14 +11,15 @@ const SearchBar = () => {
 
   // when the search state changes, dispatch fetchPost with the search state as
   // a paramater
-  useEffect(() => dispatch(fetchPost(search)), [search, dispatch]);
+  useEffect(() => dispatch(reduxAction(search)),
+    [search, dispatch, reduxAction]);
 
   return (
     <section className='search-wrapper'>
       <input
         type='search'
         value={search}
-        placeholder="search by ID..."
+        placeholder={placeholder}
         onChange={(e) => setSearch(e.target.value)}
         className=''
       />

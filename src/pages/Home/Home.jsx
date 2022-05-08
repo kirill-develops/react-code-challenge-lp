@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getAllPosts, getOne } from '../../features/posts/postsSlice';
-import { fetchPosts } from '../../features/posts/postsActions';
+import { fetchPost, fetchPosts } from '../../features/posts/postsActions';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AddPostModal from '../../components/AddPostModal/AddPostModal';
 import PostInteractions from '../../components/PostInteractions/PostInteractions';
@@ -73,7 +73,10 @@ const Home = () => {
 
   return (
     <div className='page-layout'>
-      <SearchBar />
+      <SearchBar
+        reduxAction={fetchPost}
+        placeholder="search by ID..."
+      />
       <AddPostModal />
       <div className='card-deck'>
         {content}
