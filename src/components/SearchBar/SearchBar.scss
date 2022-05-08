@@ -1,7 +1,7 @@
 @use '../../styles/mixins'as*;
 
 .search-wrapper {
-  @include padding-medium;
+  @include padding-large;
   padding-bottom: 0;
   width: 100%;
   display: flex;

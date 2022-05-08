@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import './Home.scss';
 import { getAllPosts, getOne } from '../../features/posts/postsSlice';
 import { fetchPosts } from '../../features/posts/postsActions';
 import SearchBar from '../../components/SearchBar/SearchBar';
@@ -73,7 +72,7 @@ const Home = () => {
   }
 
   return (
-    <div className='home-page'>
+    <div className='page-layout'>
       <SearchBar />
       <AddPostModal />
       <div className='card-deck'>
