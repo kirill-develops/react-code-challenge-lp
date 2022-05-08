@@ -51,7 +51,6 @@ export function addPost(postData) {
       axios(addPostObj(postData))
         .then((res) => {
           if (res.status === 200 || res.status === 201) {
-            console.log(res.data)
             dispatch(postAdded(res.data));
           } else {
             dispatch(setErr(res.status))

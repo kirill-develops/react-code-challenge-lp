@@ -28,6 +28,11 @@ export const postSlice = createSlice({
       const { id, title, body } = action.payload;
       const exsistingPost = state.posts.find(post => post.id === id);
 
+      if (state.postById.id === id) {
+        state.postById.title = title;
+        state.postById.body = body;
+      }
+
       if (exsistingPost) {
         exsistingPost.title = title;
         exsistingPost.body = body;
@@ -35,6 +40,10 @@ export const postSlice = createSlice({
     },
     postDeleted: (state, action) => {
       const remaingPosts = state.posts.filter(post => post.id !== action.payload);
+
+       if (state.postById.id === action.payload) {
+        state.postById = {};
+      }
 
       state.posts = remaingPosts;
     }
