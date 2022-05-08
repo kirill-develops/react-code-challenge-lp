@@ -1,3 +1,4 @@
+import './PostInteractions.scss';
 import React, { useReducer } from 'react'
 import { useDispatch } from 'react-redux';
 import { deletePost } from '../../features/posts/postsActions';
@@ -11,7 +12,7 @@ const PostInteractions = ({ post }) => {
   const onDelete = e => dispatch(deletePost(post.id));
 
   return (
-    <div>
+    <div className='button-wrapper'>
       <button
         type='button'
         onClick={toggleEditPost}

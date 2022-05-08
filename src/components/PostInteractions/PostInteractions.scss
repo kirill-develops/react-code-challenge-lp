@@ -1,0 +1,6 @@
+@use '../../styles/variables'as*;
+
+.button-wrapper {
+  display: flex;
+  gap: $padding-medium;
+}

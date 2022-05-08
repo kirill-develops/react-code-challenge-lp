@@ -68,4 +68,32 @@ a {
     width: fit-content;
     margin: auto;
   }
+
+  &__title {
+    text-transform: uppercase;
+  }
+
+  &__body-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: $padding-xl;
+  }
+
+  &__body {
+    width: 80%;
+    margin: 0;
+  }
+
+  &__metrics {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: $padding-small;
+  }
+
+  &__label {
+    font-style: italic;
+    margin: 0;
+  }
 }
