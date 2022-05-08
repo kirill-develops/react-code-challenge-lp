@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getAllPosts, getOne } from '../../features/posts/postsSlice';
-import { fetchPost, fetchPosts } from '../../features/posts/postsActions';
-import SearchBar from '../../components/SearchBar/SearchBar';
-import AddPostModal from '../../components/AddPostModal/AddPostModal';
-import PostInteractions from '../../components/PostInteractions/PostInteractions';
+import { getAllPosts, getOne } from '../features/posts/postsSlice';
+import { fetchPost, fetchPosts } from '../features/posts/postsActions';
+import SearchBar from '../components/SearchBar/SearchBar';
+import AddPostModal from '../components/AddPostModal/AddPostModal';
+import Card from '../components/Card/Card';
 
 const Home = () => {
   // localized dispatch caller of useDispatch hook
@@ -36,35 +36,14 @@ const Home = () => {
         <h2>No such ID</h2>
       </div>
     )
-  } else if (postSearchedFor.id) {
-    content = (
-      <div className='card'>
-        <h1 className='card__title'>
-          {postSearchedFor.title}
-        </h1>
-        <p className='card__body'>
-          {postSearchedFor.body}
-        </p>
-        <p className='card__label'>
-          post id number:{postSearchedFor.id}
-        </p>
-      </div>
-    )
-  } else if (postStatus === 'succeeded') {
+  }
+  else if (postSearchedFor.id) {
+    content = <Card post={postSearchedFor} />
+  }
+  else if (postStatus === 'succeeded') {
     content = allPosts.slice()
       .map(post =>
-        <div key={post.id} className='card'>
-          <h1 className='card__title'>
-            {post.title}
-          </h1>
-          <p className='card__body'>
-            {post.body}
-          </p>
-          <PostInteractions post={post} />
-          <p className='card__label'>
-            post id number:{post.id}
-          </p>
-        </div>
+        <Card key={post.id} post={post} />
       );
   }
   else if (postStatus === 'failed') {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllCountries, getAllUniversity } from '../../features/university/universitySlice.js';
-import { fetchCountries, fetchUniversity } from '../../features/university/universityActions.js';
+import { getAllCountries, getAllUniversity } from '../features/university/universitySlice.js';
+import { fetchCountries, fetchUniversity } from '../features/university/universityActions.js';
 
 const Universities = () => {
   const dispatch = useDispatch();

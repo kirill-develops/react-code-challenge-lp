@@ -1,9 +1,8 @@
-import './PostalLookup.scss';
 import React, { useId } from 'react';
 import { useSelector } from 'react-redux';
-import { getAllData } from '../../features/postal/postalSlice';
-import SearchBar from '../../components/SearchBar/SearchBar';
-import { fetchZipCode } from '../../features/postal/postalActions';
+import { getAllData } from '../features/postal/postalSlice';
+import SearchBar from '../components/SearchBar/SearchBar';
+import { fetchZipCode } from '../features/postal/postalActions';
 
 const PostalLookup = () => {
 
