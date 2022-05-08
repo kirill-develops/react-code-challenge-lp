@@ -72,16 +72,16 @@ const Home = () => {
   }
 
   return (
-    <div className='page-layout'>
+    <main className='page-layout'>
       <SearchBar
         reduxAction={fetchPost}
         placeholder="search by ID..."
       />
       <AddPostModal />
-      <div className='card-deck'>
+      <section className='card-deck'>
         {content}
-      </div>
-    </div>
+      </section>
+    </main>
   )
 };
 

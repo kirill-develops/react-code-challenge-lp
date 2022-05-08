@@ -31,7 +31,7 @@ const Universities = () => {
     universityData = <div>{error}</div>
   }
 
-  const university = useSelector(getAllUniversity)
+  const university = useSelector(getAllUniversity);
   const [search, setSearch] = useState('Canada');
   const onCountryChanged = e => setSearch(e.target.value);
 
@@ -56,21 +56,21 @@ const Universities = () => {
   }
 
   return countryStatus === 'loading' ? (<div>Loading</div>) : (
-    <section className='page-layout'>
-      <div className='search-wrapper'>
+    <main className='page-layout'>
+      <section className='search-wrapper'>
         <select
           value={search}
           onChange={onCountryChanged}
           disabled={countryStatus !== "succeeded"}
         >
-          <option value="">Select Country</option>
+          <option value="" disabled>Select Country</option>
           {countryOptions}
         </select>
-      </div>
+      </section>
       <section className='card-deck'>
         {universityData}
       </section>
-    </section>
+    </main>
   )
 };
 
