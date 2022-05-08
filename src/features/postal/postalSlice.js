@@ -3,33 +3,35 @@ import { fetchZipCode } from './postalActions';
 
 const initialState = {
   data: [],
-  status: 'idle',
+  zip: '',
   error: null
 }
 
 export const postalSlice = createSlice({
   name: 'postal',
   initialState,
-  reducers: {},
-  extraReducers(builder) {
-    builder
-      .addCase(fetchZipCode.pending, (state, _action) => {
-        state.status = 'loading'
-      })
-      .addCase(fetchZipCode.fulfilled, (state, action) => {
-        state.status = 'succeeded'
+  reducers: {
+    setZip: (state, action) => {
+      const { search, data } = action.payload;
 
-        // Add fetched countries to the array
-        state.data = action.payload
-      })
-      .addCase(fetchZipCode.rejected, (state, action) => {
-        state.status = 'failed'
-        state.error = action.error.message
-      })
+      if (search === 404) {
+        state.error = action.payload.search;
+      }
+      else if (search === '' || data === []) {
+        state.zip = action.payload.search;
+        state.data = (action.payload.data);
+        state.error = null;
+      }
+      else {
+        state.zip = action.payload.search;
+        state.data = (action.payload.data.places);
+        state.error = null;
+      }
+    },
   },
 })
 export default postalSlice.reducer;
 
-export const { } = postalSlice.actions;
+export const { setZip } = postalSlice.actions;
 
 export const getAllData = state => state.postal.data;
