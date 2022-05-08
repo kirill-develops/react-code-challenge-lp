@@ -28,7 +28,7 @@ export const universitySlice = createSlice({
       .addCase(fetchCountries.fulfilled, (state, action) => {
         state.status = 'succeeded'
 
-        // Add any fetched posts to the array
+        // Add fetched countries to the array
         state.country = action.payload
           .sort((a, b) => a.name.localeCompare(b.name))
       })
@@ -44,3 +44,5 @@ export default universitySlice.reducer;
 export const { setUni } = universitySlice.actions;
 
 export const getAllCountries = state => state.university.country;
+
+export const getAllUniversity = state => state.university.university;
