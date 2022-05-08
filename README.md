@@ -7,6 +7,8 @@
 1. Clone or download the code
 2. Install dependencies
 
+        `$ npm install`
+
 3. Start app
         
         `$ npm start`
