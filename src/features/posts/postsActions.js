@@ -1,9 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+
 import { postAdded, postDeleted, postEditted, setErr, setPost } from "./postsSlice";
+
 
 // base server address variable for readability
 const SERVER_URL = 'https://jsonplaceholder.typicode.com/';
+
 
 // Axios request object for getting all posts
 const getAll = {
@@ -17,6 +20,7 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   const response = await axios(getAll)
   return response.data
 });
+
 
 // Axios request function returning details for specific post by provided id
 const getOne = (id) => ({
@@ -36,6 +40,7 @@ export function fetchPost(search) {
   }
 };
 
+
 const addPostObj = (postData) => ({
   baseURL: SERVER_URL,
   method: 'post',
@@ -50,15 +55,15 @@ export function addPost(postData) {
       && Number(postData.userId))
       axios(addPostObj(postData))
         .then((res) => {
-          if (res.status === 200 || res.status === 201) {
+          if (res.status === 200 || res.status === 201)
             dispatch(postAdded(res.data));
-          } else {
-            dispatch(setErr(res.status))
-          }
+          else
+            dispatch(setErr(res.status));
         })
-        .catch(({ res }) => dispatch(setErr(res.status)))
+        .catch(({ res }) => dispatch(setErr(res.status)));
   };
 };
+
 
 const editPostObj = (postId, postData) => ({
   baseURL: SERVER_URL,
@@ -75,15 +80,15 @@ export function editPost(postId, postData) {
       && Number(postData.id === postId))
       axios(editPostObj(postId, postData))
         .then((res) => {
-          if (res.status === 200 || res.status === 201) {
+          if (res.status === 200 || res.status === 201)
             dispatch(postEditted(res.data));
-          } else {
+          else
             dispatch(setErr(res.status))
-          }
         })
         .catch(({ res }) => dispatch(setErr(res.status)))
   };
 };
+
 
 const deletePostObj = (id) => ({
   baseURL: SERVER_URL,
@@ -93,14 +98,13 @@ const deletePostObj = (id) => ({
 
 export function deletePost(postId) {
   return function (dispatch) {
-      axios(deletePostObj(postId))
-        .then((res) => {
-          if (res.status === 200 || res.status === 201) {
-            dispatch(postDeleted(postId));
-          } else {
-            dispatch(setErr(res.status))
-          }
-        })
-        .catch(({ res }) => dispatch(setErr(res)))
+    axios(deletePostObj(postId))
+      .then((res) => {
+        if (res.status === 200 || res.status === 201)
+          dispatch(postDeleted(postId));
+        else
+          dispatch(setErr(res.status));
+      })
+      .catch(({ res }) => dispatch(setErr(res)))
   };
 };

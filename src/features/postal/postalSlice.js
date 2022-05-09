@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchZipCode } from './postalActions';
 
 const initialState = {
   data: [],
@@ -29,7 +28,8 @@ export const postalSlice = createSlice({
       }
     },
   },
-})
+});
+
 export default postalSlice.reducer;
 
 export const { setZip } = postalSlice.actions;

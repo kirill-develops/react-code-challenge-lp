@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import { fetchPosts } from "./postsActions";
 
 const initialState = {
@@ -13,10 +14,10 @@ export const postSlice = createSlice({
   initialState,
   reducers: {
     setPost: (state, action) => {
-      if (action.payload === 404) {
+      if (action.payload === 404)
         state.postById = 'No such Id';
-      }
-      state.postById = (action.payload);
+      else
+        state.postById = (action.payload);
     },
     setErr: (state, action) => {
       state.error = action.payload
@@ -41,14 +42,14 @@ export const postSlice = createSlice({
     postDeleted: (state, action) => {
       const remaingPosts = state.posts.filter(post => post.id !== action.payload);
 
-       if (state.postById.id === action.payload) {
+      if (state.postById.id === action.payload) {
         state.postById = {};
       }
 
       state.posts = remaingPosts;
     }
- },
- extraReducers(builder) {
+  },
+  extraReducers(builder) {
     builder
       .addCase(fetchPosts.pending, (state, _action) => {
         state.status = 'loading'
@@ -56,19 +57,19 @@ export const postSlice = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = 'succeeded'
         // Add any fetched posts to the array
-        state.posts = action.payload.sort((a,b)=> b.id - a.id)
+        state.posts = action.payload.sort((a, b) => b.id - a.id)
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
       })
   },
-})
+});
+
 export default postSlice.reducer;
 
 
 export const { setPost, setErr, postAdded, postEditted, postDeleted } = postSlice.actions;
-
 
 export const getAllPosts = state => state.posts.posts;
 export const getOne = state => state.posts.postById;

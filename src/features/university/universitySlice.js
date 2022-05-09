@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import { fetchCountries } from "./universityActions";
 
 const initialState = {
@@ -12,15 +13,15 @@ export const universitySlice = createSlice({
   name: 'university',
   initialState,
   reducers: {
-     setUni: (state, action) => {
-      if (action.payload === 404) {
+    setUni: (state, action) => {
+      if (action.payload === 404)
         state.university.push('Error... Try refreshing page');
-      }
-      state.university = action.payload
-        .sort((a, b) => a.name.localeCompare(b.name));
+      else
+        state.university = action.payload
+          .sort((a, b) => a.name.localeCompare(b.name));
     },
   },
-   extraReducers(builder) {
+  extraReducers(builder) {
     builder
       .addCase(fetchCountries.pending, (state, _action) => {
         state.status = 'loading'
@@ -37,8 +38,8 @@ export const universitySlice = createSlice({
         state.error = action.error.message
       })
   },
+});
 
-})
 export default universitySlice.reducer;
 
 export const { setUni } = universitySlice.actions;
