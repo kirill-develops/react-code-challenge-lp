@@ -1,0 +1,44 @@
+@use '../../styles/mixins'as*;
+@use '../../styles/variables'as*;
+
+.card {
+  @include padding-large;
+  width: 100%;
+  border: 2px solid black;
+  border-radius: $brdr-radius-medium;
+
+  &__multi_row {
+    @extend .card;
+    width: fit-content;
+    margin: auto;
+  }
+}
+
+.title {
+  text-transform: uppercase;
+}
+
+.body_wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: $padding-xl;
+}
+
+.body {
+  width: 75%;
+  margin: 0;
+}
+
+.metrics {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: $padding-small;
+}
+
+.label {
+  font-style: italic;
+  margin: 0;
+}

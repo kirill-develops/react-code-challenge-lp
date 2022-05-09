@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import Styles from '../styles/global.module.scss';
+import CardStyles from '../components/Card/Card.module.scss';
 import { getAllCountries, getAllUniversity } from '../features/university/universitySlice.js';
 import { fetchCountries, fetchUniversity } from '../features/university/universityActions.js';
 
@@ -46,18 +49,18 @@ const Universities = () => {
   } else if (university[0]) {
     universityData = university
       .map(uni =>
-        <div key={uni.name} className='card' >
+        <div key={uni.name} className={CardStyles.card} >
           <h1 className=''>
             {uni.name}
           </h1>
-          <a href={uni.web_pages[0]} className='link'>{uni.web_pages[0]}</a>
+          <a href={uni.web_pages[0]} >{uni.web_pages[0]}</a>
         </div>
       )
   }
 
   return countryStatus === 'loading' ? (<div>Loading</div>) : (
-    <main className='page-layout'>
-      <section className='search-wrapper'>
+    <main className={Styles.page_layout}>
+      <section className={Styles.search_wrapper}>
         <select
           value={search}
           onChange={onCountryChanged}
@@ -67,7 +70,7 @@ const Universities = () => {
           {countryOptions}
         </select>
       </section>
-      <section className='card-deck'>
+      <section className={Styles.card_deck}>
         {universityData}
       </section>
     </main>

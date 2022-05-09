@@ -1,6 +1,7 @@
-import './SearchBar.scss';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+
+import Styles from '../../styles/global.module.scss';
 
 const SearchBar = ({ reduxAction, placeholder }) => {
   // search state & redux variable
@@ -15,16 +16,16 @@ const SearchBar = ({ reduxAction, placeholder }) => {
     [search, dispatch, reduxAction]);
 
   return (
-    <section className='search-wrapper'>
+    <section className={Styles.search_wrapper}>
       <input
         type='search'
         value={search}
         placeholder={placeholder}
         onChange={(e) => setSearch(e.target.value)}
-        className=''
+        className={Styles.search}
       />
     </section>
   )
-}
+};
 
-export default SearchBar
+export default SearchBar;

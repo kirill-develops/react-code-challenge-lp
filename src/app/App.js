@@ -1,13 +1,12 @@
-import '../styles/global.scss';
+import { Route, Routes } from 'react-router-dom';
+
 import Nav from "../components/Nav/Nav";
 import Home from "../pages/Home";
 import Universities from "../pages/Universities";
 import PostalLookup from "../pages/PostalLookup";
-import { Route, Routes } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
+const App = () => (
+    <>
       <Nav />
       <Routes>
         <Route
@@ -23,8 +22,7 @@ function App() {
           element={(<PostalLookup />)}
         />
       </Routes>
-    </div>
+    </>
   );
-};
 
 export default App;

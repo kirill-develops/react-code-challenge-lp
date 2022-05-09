@@ -1,5 +1,8 @@
 import React, { useId } from 'react';
 import { useSelector } from 'react-redux';
+
+import CardStyles from '../components/Card/Card.module.scss';
+import GlobalStyles from '../styles/global.module.scss';
 import { getAllData } from '../features/postal/postalSlice';
 import SearchBar from '../components/SearchBar/SearchBar';
 import { fetchZipCode } from '../features/postal/postalActions';
@@ -18,28 +21,27 @@ const PostalLookup = () => {
   }
   else if (zipData[0]) {
     content =
-      <section className='card-deck'>
+      <section className={GlobalStyles.card_deck}>
         <h2 className=''>Results For Zip Code: {zipCode}</h2>
         {zipData.map(each =>
-          <div key={useId} className='card--multi-row'>
-            <h2 className=''>
+          <div key={useId} className={CardStyles.card__multi_row}>
+            <h2 className={CardStyles.title}>
               {each['place name']}, {each['state abbreviation']}
             </h2>
-            <h3 className=''>{each.latitude}, {each.longitude}</h3>
-            <h3 className=''>State: {each.state}</h3>
+            <p className="">State: {each.state}</p>
+            <h3 className={CardStyles.label}>Latitude: {each.latitude}</h3>
+            <h3 className={CardStyles.label}> Longitude: {each.longitude}</h3>
           </div>
         )}
       </section>
   }
 
   return (
-    <main className='page-layout'>
-      <section className='search-wrapper'>
-        <SearchBar
-          reduxAction={fetchZipCode}
-          placeholder="enter US zipcode..."
-        />
-      </section>
+    <main className={GlobalStyles.page_layout}>
+      <SearchBar
+        reduxAction={fetchZipCode}
+        placeholder="enter US zipcode..."
+      />
       {content}
     </main>
   )

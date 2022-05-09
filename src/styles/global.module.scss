@@ -38,7 +38,7 @@ a {
   }
 }
 
-.page-layout {
+.page_layout {
   height: 100%;
   width: 100%;
   display: flex;
@@ -48,7 +48,7 @@ a {
   overflow-y: hidden;
 }
 
-.card-deck {
+.card_deck {
   @include padding-large;
   width: 100%;
   display: flex;
@@ -57,43 +57,11 @@ a {
   gap: $padding-xl;
 }
 
-.card {
+.search_wrapper {
   @include padding-large;
+  padding-bottom: 0;
   width: 100%;
-  border: 2px solid black;
-  border-radius: $brdr-radius-medium;
-
-  &--multi-row {
-    @extend .card;
-    width: fit-content;
-    margin: auto;
-  }
-
-  &__title {
-    text-transform: uppercase;
-  }
-
-  &__body-wrapper {
-    display: flex;
-    justify-content: space-between;
-    gap: $padding-xl;
-  }
-
-  &__body {
-    width: 80%;
-    margin: 0;
-  }
-
-  &__metrics {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: flex-end;
-    gap: $padding-small;
-  }
-
-  &__label {
-    font-style: italic;
-    margin: 0;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

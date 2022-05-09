@@ -1,8 +1,9 @@
-import './PostInteractions.scss';
-import React, { useReducer } from 'react'
+import React, { useReducer } from 'react';
 import { useDispatch } from 'react-redux';
+
+import Styles from './PostInteractions.module.scss';
 import { deletePost } from '../../features/posts/postsActions';
-import EditPostModal from '../EditPostModal/EditPostModal';
+import EditPostModal from '../PostModals/EditPostModal';
 
 const PostInteractions = ({ post }) => {
   const dispatch = useDispatch();
@@ -12,7 +13,7 @@ const PostInteractions = ({ post }) => {
   const onDelete = e => dispatch(deletePost(post.id));
 
   return (
-    <div className='button-wrapper'>
+    <div className={Styles.button_wrapper}>
       <button
         type='button'
         onClick={toggleEditPost}
@@ -29,6 +30,6 @@ const PostInteractions = ({ post }) => {
       }
     </div>
   )
-}
+};
 
 export default PostInteractions;

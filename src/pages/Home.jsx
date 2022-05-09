@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import Styles from '../styles/global.module.scss';
 import { getAllPosts, getOne } from '../features/posts/postsSlice';
 import { fetchPost, fetchPosts } from '../features/posts/postsActions';
 import SearchBar from '../components/SearchBar/SearchBar';
-import AddPostModal from '../components/AddPostModal/AddPostModal';
+import AddPostModal from '../components/PostModals/AddPostModal';
 import Card from '../components/Card/Card';
 
 const Home = () => {
@@ -51,13 +52,13 @@ const Home = () => {
   }
 
   return (
-    <main className='page-layout'>
+    <main className={Styles.page_layout}>
       <SearchBar
         reduxAction={fetchPost}
         placeholder="search by ID..."
       />
       <AddPostModal />
-      <section className='card-deck'>
+      <section className={Styles.card_deck}>
         {content}
       </section>
     </main>
