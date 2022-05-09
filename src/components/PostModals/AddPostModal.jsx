@@ -1,8 +1,10 @@
-import './AddPostModal.scss';
 import React, { useReducer, useState } from 'react';
-import { addPost } from '../../features/posts/postsActions';
 import { customAlphabet } from 'nanoid';
 import { useDispatch } from 'react-redux';
+
+import Styles from './PostModal.module.scss';
+import { addPost } from '../../features/posts/postsActions';
+
 
 const nanoid = customAlphabet('1234567890', 12)
 
@@ -13,10 +15,16 @@ const AddPostModal = () => {
 
   const dispatch = useDispatch();
 
+  // boolean variable representing if the title and content are appropriate lengths
+  const canSave = Boolean(title.length > 2) && Boolean(content.length > 4);
+
+  // function to handle form submission 
   const onFormSubmit = (event) => {
+    // prevents page reload
     event.preventDefault();
 
-    if (title && content) {
+    // check title & content have values
+    if (canSave) {
       const postObj = {
         title: title,
         body: content,
@@ -26,14 +34,14 @@ const AddPostModal = () => {
       setTitle('');
       setContent('');
       toggleNewPost();
-    }
-  }
+    };
+  };
 
   return newPost ? (
-    <section className='new-post__overlay'>
-      <div className='new-post'>
+    <section className={Styles.overlay}>
+      <div className={Styles.modal}>
         <h2>Add a New Post</h2>
-        <form onSubmit={onFormSubmit} className='new-post__form'>
+        <form onSubmit={onFormSubmit} className={Styles.form}>
           <label htmlFor="postTitle">Post Title:</label>
           <input
             type="text"
@@ -48,16 +56,17 @@ const AddPostModal = () => {
             name="postContent"
             value={content}
             onChange={e => setContent(e.target.value)}
-            className='new-post__input--large'
+            className={Styles.input__large}
           />
           <button
             type="submit"
-            className='new-post__button'
+            className={Styles.button}
+            disabled={!canSave}
           >Save Post</button>
           <button
             type="button"
             onClick={toggleNewPost}
-            className='new-post__button'
+            className={Styles.button}
           >Cancel</button>
         </form>
       </div>
@@ -66,10 +75,10 @@ const AddPostModal = () => {
     <button
       type='button'
       onClick={toggleNewPost}
-      className='new-post__button'>
+      className={Styles.button}>
       CREATE POST
     </button>
-  )
-}
+  );
+};
 
 export default AddPostModal;
