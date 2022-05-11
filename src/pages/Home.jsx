@@ -7,6 +7,7 @@ import { fetchPost, fetchPosts } from '../features/posts/postsActions';
 import SearchBar from '../components/SearchBar/SearchBar';
 import AddPostModal from '../components/PostModals/AddPostModal';
 import Card from '../components/Card/Card';
+import PostInteractions from '../components/PostInteractions/PostInteractions';
 
 const Home = () => {
   // localized dispatch caller of useDispatch hook
@@ -22,33 +23,37 @@ const Home = () => {
   // when the page first loads, dispatch fetchPosts to populate our posts Redux state
   useEffect(() => {
     if (postStatus === 'idle') dispatch(fetchPosts())
-  }, [postStatus, dispatch])
+  }, [postStatus, dispatch]);
 
   // create content variable to transform based on API responses
   let content;
 
-  if (postStatus === 'loading') {
-    content = (
-      <h1>Loading...</h1>
-    )
-  } else if (postSearchedFor === 404) {
-    content = (
-      <div className='card'>
-        <h2>No such ID</h2>
-      </div>
-    )
-  }
-  else if (postSearchedFor.id) {
-    content = <Card post={postSearchedFor} />
-  }
-  else if (postStatus === 'succeeded') {
-    content = allPosts.slice()
-      .map(post =>
-        <Card key={post.id} post={post} />
-      );
-  }
-  else if (postStatus === 'failed') {
-    content = <div>{error}</div>
+  switch (postStatus || postSearchedFor) {
+    default:
+      content = (
+        <h1>Loading...</h1>);
+      break;
+    case 404:
+      content = (
+        <div className='card'>
+          <h2>No such ID</h2>
+        </div>
+      )
+      break;
+    case postSearchedFor.id:
+      content = <Card post={postSearchedFor} />
+      break;
+    case 'succeeded':
+      content = allPosts.slice()
+        .map(post =>
+          <Card key={post.id} post={post}>
+            <PostInteractions post={post} />
+          </Card>
+        );
+      break;
+    case 'failed':
+      content = <div>{error}</div>;
+      break;
   }
 
   return (
@@ -65,4 +70,4 @@ const Home = () => {
   )
 };
 
-export default Home;
+export default React.memo(Home);
