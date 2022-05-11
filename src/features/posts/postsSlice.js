@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 
 import { fetchPosts } from "./postsActions";
 
@@ -15,7 +15,7 @@ export const postSlice = createSlice({
   reducers: {
     setPost: (state, action) => {
       if (action.payload === 404)
-        state.postById = 'No such Id';
+        state.postById = action.payload;
       else
         state.postById = (action.payload);
     },
@@ -71,10 +71,16 @@ export default postSlice.reducer;
 
 export const { setPost, setErr, postAdded, postEditted, postDeleted } = postSlice.actions;
 
-export const getAllPosts = state => state.posts.posts;
-export const getOne = state => state.posts.postById;
+export const getAllPosts = createSelector(
+  [(state=>state)], state => state.posts.posts);
+
+export const getOne = createSelector([state => state],
+  state => state.posts.postById);
 
 // Alternative method not requested but optional for better performance. Trade
 // off, server data may have already been deleted while client is interacting
 // with state data.
-export const getPostById = (state, postId) => state.posts.posts.find(post => post.id === postId);
+export const getPostById = createSelector(
+  [(state, _userId) => state, (_state, userId) => userId],
+  (state, postId) => state.posts.posts.find(post => post.id === postId)
+)
