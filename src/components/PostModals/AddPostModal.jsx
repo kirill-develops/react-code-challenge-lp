@@ -81,4 +81,4 @@ const AddPostModal = () => {
   );
 };
 
-export default AddPostModal;
+export default React.memo(AddPostModal);

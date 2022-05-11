@@ -71,4 +71,4 @@ const EditPostModal = ({ post, toggleEditPost }) => {
   )
 }
 
-export default EditPostModal;
+export default React.memo(EditPostModal);

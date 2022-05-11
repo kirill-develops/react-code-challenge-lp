@@ -32,4 +32,4 @@ const PostInteractions = ({ post }) => {
   )
 };
 
-export default PostInteractions;
+export default React.memo(PostInteractions);

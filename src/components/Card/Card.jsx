@@ -1,9 +1,8 @@
 import React from 'react';
 
 import Styles from './Card.module.scss';
-import PostInteractions from '../PostInteractions/PostInteractions';
 
-const Card = ({ post }) => (
+const Card = ({ post, children }) => (
   <div className={Styles.card}>
     <h1 className={Styles.title}>
       {post.title}
@@ -13,7 +12,7 @@ const Card = ({ post }) => (
         {post.body}
       </p>
       <div className={Styles.metrics}>
-        <PostInteractions post={post} />
+        {children}
         <p className={Styles.label}>
           post id number:{post.id}
         </p>
@@ -23,4 +22,4 @@ const Card = ({ post }) => (
 );
 
 
-export default Card;
+export default React.memo(Card);

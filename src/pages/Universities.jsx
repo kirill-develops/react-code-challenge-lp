@@ -10,7 +10,8 @@ const Universities = () => {
   const dispatch = useDispatch();
 
   const countries = useSelector(getAllCountries);
-  const countryStatus = useSelector(state => state.university.status)
+  const countryStatus = useSelector(state => state.university.status);
+
   const error = useSelector(state => state.university.error);
 
   useEffect(() => {
@@ -77,4 +78,4 @@ const Universities = () => {
   )
 };
 
-export default Universities;
+export default React.memo(Universities);
