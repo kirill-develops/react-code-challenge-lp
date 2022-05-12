@@ -3,16 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Styles from '../styles/global.module.scss';
 import CardStyles from '../components/Card/Card.module.scss';
-import { getAllCountries, getAllUniversity } from '../features/university/universitySlice.js';
-import { fetchCountries, fetchUniversity } from '../features/university/universityActions.js';
+import { getAllUniversity } from '../features/university/universitySlice.js';
+import { fetchUniversity } from '../features/university/universityActions.js';
+import { fetchCountries, getAllCountries } from '../features/country/countrySlice';
 
 const Universities = () => {
   const dispatch = useDispatch();
 
   const countries = useSelector(getAllCountries);
-  const countryStatus = useSelector(state => state.university.status);
-
-  const error = useSelector(state => state.university.error);
+  const countryStatus = useSelector(state => state.country.status);
+  const error = useSelector(state => state.country.error);
 
   useEffect(() => {
     if (countryStatus === 'idle') dispatch(fetchCountries())
@@ -50,7 +50,7 @@ const Universities = () => {
   } else if (university[0]) {
     universityData = university
       .map(uni =>
-        <div key={uni.name} className={CardStyles.card} >
+        <div key={uni.id} className={CardStyles.card} >
           <h1 className=''>
             {uni.name}
           </h1>
