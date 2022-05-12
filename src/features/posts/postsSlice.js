@@ -1,13 +1,16 @@
-import { createSelector, createSlice } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSelector, createSlice } from "@reduxjs/toolkit";
 
 import { fetchPosts } from "./postsActions";
 
-const initialState = {
-  posts: [],
+const postsAdapter = createEntityAdapter({
+  sortComparer: (a,b) => b.id - a.id
+})
+
+const initialState = postsAdapter.getInitialState({
   postById: {},
   status: 'idle',
   error:null
-};
+});
 
 export const postSlice = createSlice({
   name: 'posts',
@@ -17,36 +20,26 @@ export const postSlice = createSlice({
       if (action.payload === 404)
         state.postById = action.payload;
       else
-        state.postById = (action.payload);
+      state.postById = action.payload;
     },
     setErr: (state, action) => {
-      state.error = action.payload
+      state.error = action.payload;
     },
     postAdded: (state, action) => {
-      state.posts.unshift(action.payload)
+      postsAdapter.addOne(state, action.payload);
     },
     postEditted: (state, action) => {
       const { id, title, body } = action.payload;
-      const exsistingPost = state.posts.find(post => post.id === id);
 
       if (state.postById.id === id) {
         state.postById.title = title;
         state.postById.body = body;
       }
 
-      if (exsistingPost) {
-        exsistingPost.title = title;
-        exsistingPost.body = body;
-      }
+      postsAdapter.updateOne(state, { id: id, changes: { title: title, body: body } });
     },
     postDeleted: (state, action) => {
-      const remaingPosts = state.posts.filter(post => post.id !== action.payload);
-
-      if (state.postById.id === action.payload) {
-        state.postById = {};
-      }
-
-      state.posts = remaingPosts;
+      postsAdapter.removeOne(state, action.payload);
     }
   },
   extraReducers(builder) {
@@ -57,7 +50,7 @@ export const postSlice = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = 'succeeded'
         // Add any fetched posts to the array
-        state.posts = action.payload.sort((a, b) => b.id - a.id)
+        postsAdapter.setAll(state, action.payload);
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = 'failed'
@@ -68,19 +61,10 @@ export const postSlice = createSlice({
 
 export default postSlice.reducer;
 
-
 export const { setPost, setErr, postAdded, postEditted, postDeleted } = postSlice.actions;
 
-export const getAllPosts = createSelector(
-  [(state=>state)], state => state.posts.posts);
+export const {selectAll: getAllPosts, selectById: getPostById} = postsAdapter.getSelectors(
+   state => state.posts);
 
 export const getOne = createSelector([state => state],
   state => state.posts.postById);
-
-// Alternative method not requested but optional for better performance. Trade
-// off, server data may have already been deleted while client is interacting
-// with state data.
-export const getPostById = createSelector(
-  [(state, _userId) => state, (_state, userId) => userId],
-  (state, postId) => state.posts.posts.find(post => post.id === postId)
-)

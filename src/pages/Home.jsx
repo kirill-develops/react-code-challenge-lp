@@ -28,32 +28,32 @@ const Home = () => {
   // create content variable to transform based on API responses
   let content;
 
-  switch (postStatus || postSearchedFor) {
-    default:
-      content = (
-        <h1>Loading...</h1>);
-      break;
-    case 404:
-      content = (
-        <div className='card'>
-          <h2>No such ID</h2>
-        </div>
-      )
-      break;
-    case postSearchedFor.id:
-      content = <Card post={postSearchedFor} />
-      break;
-    case 'succeeded':
-      content = allPosts.slice()
-        .map(post =>
-          <Card key={post.id} post={post}>
-            <PostInteractions post={post} />
-          </Card>
-        );
-      break;
-    case 'failed':
-      content = <div>{error}</div>;
-      break;
+  if (postStatus === 'loading') {
+    content = (
+      <h1>Loading...</h1>);
+  }
+  else if (postStatus === 404) {
+    content = (
+      <div className='card'>
+        <h2>No such ID</h2>
+      </div>
+    )
+  }
+  else if (postSearchedFor.id) {
+    content = <Card post={postSearchedFor}>
+      <PostInteractions post={postSearchedFor} />
+    </Card>
+  }
+  else if (postStatus === 'succeeded') {
+    content = allPosts.slice()
+      .map(post =>
+        <Card key={post.id} post={post}>
+          <PostInteractions post={post} />
+        </Card>
+      );
+  }
+  else if (postStatus === 'failed') {
+    content = <div>{error}</div>;
   }
 
   return (
