@@ -1,16 +1,33 @@
 import React, { useReducer } from 'react';
-import { useDispatch } from 'react-redux';
 
+import { useDeleteOnePostMutation } from '../../features/api/apiSlice';
 import Styles from './PostInteractions.module.scss';
-import { deletePost } from '../../features/posts/postsActions';
 import EditPostModal from '../PostModals/EditPostModal';
 
 const PostInteractions = ({ post }) => {
-  const dispatch = useDispatch();
 
   const [editPost, toggleEditPost] = useReducer(checked => !checked, false);
 
-  const onDelete = e => dispatch(deletePost(post.id));
+  const [deletePost, { isLoading }] = useDeleteOnePostMutation();
+
+  const onDelete = async () => {
+    if (post.id && !isLoading) {
+      try {
+        await deletePost(post.id).unwrap();
+      } catch (err) {
+        console.error('Failed to delete the post: ', err)
+      }
+    }
+  }
+
+  const editPostModalOutlet = (
+    editPost
+    && <EditPostModal
+      post={post}
+      toggleEditPost={toggleEditPost}
+    />
+  )
+
 
   return (
     <div className={Styles.button_wrapper}>
@@ -22,12 +39,7 @@ const PostInteractions = ({ post }) => {
         type='button'
         onClick={onDelete}
       >Del</button>
-      {editPost
-        && <EditPostModal
-          post={post}
-          toggleEditPost={toggleEditPost}
-        />
-      }
+      {editPostModalOutlet}
     </div>
   )
 };

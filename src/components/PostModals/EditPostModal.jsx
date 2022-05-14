@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { customAlphabet } from 'nanoid';
-import { useDispatch } from 'react-redux';
 
 import Styles from './PostModal.module.scss';
-import { editPost } from '../../features/posts/postsActions';
+import { useEditOnePostMutation } from '../../features/api/apiSlice';
 
 
 const nanoid = customAlphabet('1234567890', 12);
@@ -12,13 +11,12 @@ const EditPostModal = ({ post, toggleEditPost }) => {
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.body);
 
-  const dispatch = useDispatch();
+  const [editPost, { isLoading }] = useEditOnePostMutation();
 
   // boolean variable representing if the title and content are appropriate lengths
-  const canSave = Boolean(title.length > 2) && Boolean(content.length > 4);
+  const canSave = Boolean(title.length > 2) && Boolean(content.length > 4) && !isLoading;
 
-  const onFormSubmit = (event) => {
-    event.preventDefault();
+  const onSubmit = async () => {
 
     if (canSave) {
       const postObj = {
@@ -27,10 +25,14 @@ const EditPostModal = ({ post, toggleEditPost }) => {
         body: content,
         userId: nanoid(),
       };
-      dispatch(editPost(post.id, postObj));
-      setTitle('');
-      setContent('');
-      toggleEditPost();
+      try {
+        await editPost(postObj).unwrap()
+        setTitle('');
+        setContent('');
+        toggleEditPost();
+      } catch (err) {
+        console.error('failed to update the post: ', err)
+      }
     }
   }
 
@@ -38,31 +40,37 @@ const EditPostModal = ({ post, toggleEditPost }) => {
     <section className={Styles.overlay}>
       <div className={Styles.modal}>
         <h2>Edit this Post</h2>
-        <form onSubmit={onFormSubmit} className={Styles.form}>
-          <label htmlFor="postTitle">Post Title:</label>
+        <form className={Styles.form}>
+          <label htmlFor="postTitle">
+            Post Title:</label>
           <input
             type="text"
             id="postTitle"
             name="postTitle"
             value={title}
             onChange={e => setTitle(e.target.value)}
+            disabled={isLoading}
           />
-          <label htmlFor="postContent">Content:</label>
+          <label htmlFor="postContent">
+            Content:</label>
           <textarea
             id="postContent"
             name="postContent"
             value={content}
             onChange={e => setContent(e.target.value)}
+            disabled={isLoading}
             className={Styles.input__large}
           />
           <button
-            type="submit"
-            className={Styles.button}
+            type="button"
+            onClick={onSubmit}
             disabled={!canSave}
+            className={Styles.button}
           >Save Post</button>
           <button
             type="button"
             onClick={toggleEditPost}
+            disabled={isLoading}
             className={Styles.button}
           >Cancel</button>
         </form>

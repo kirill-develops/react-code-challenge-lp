@@ -1,69 +1,80 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useMemo, useState } from 'react';
 
 import Styles from '../styles/global.module.scss';
-import { getAllPosts, getOne } from '../features/posts/postsSlice';
-import { fetchPost, fetchPosts } from '../features/posts/postsActions';
+import { useGetAllPostsQuery, useGetOnePostQuery } from '../features/api/apiSlice';
 import SearchBar from '../components/SearchBar/SearchBar';
 import AddPostModal from '../components/PostModals/AddPostModal';
 import Card from '../components/Card/Card';
 import PostInteractions from '../components/PostInteractions/PostInteractions';
 
 const Home = () => {
-  // localized dispatch caller of useDispatch hook
-  const dispatch = useDispatch();
 
-  const postSearchedFor = useSelector(getOne);
+  const { data: allPosts = [],
+    isLoading,
+    isFetching,
+    isSuccess,
+    isError,
+    error } = useGetAllPostsQuery();
 
-  // allPosts, postStatus & error copied from the posts slice in Redux
-  const allPosts = useSelector(getAllPosts);
-  const postStatus = useSelector(state => state.posts.status);
-  const error = useSelector(state => state.posts.error);
+  const sortedPosts = useMemo(() => {
+    const sortedPosts = allPosts.slice();
+    sortedPosts.sort((a, b) => b.id - a.id);
+    return sortedPosts;
+  }, [allPosts]);
 
-  // when the page first loads, dispatch fetchPosts to populate our posts Redux state
-  useEffect(() => {
-    if (postStatus === 'idle') dispatch(fetchPosts())
-  }, [postStatus, dispatch]);
+  // search state & redux variable
+  const [search, setSearch] = useState('');
+
+  const { data: post = {},
+    isSuccess: postIsSuccess,
+    isError: postIsError
+  } = useGetOnePostQuery(search);
 
   // create content variable to transform based on API responses
   let content;
 
-  if (postStatus === 'loading') {
+  if (isLoading) {
     content = (
       <h1>Loading...</h1>);
   }
-  else if (postStatus === 404) {
+  else if (postIsError) {
     content = (
       <div className='card'>
         <h2>No such ID</h2>
       </div>
     )
   }
-  else if (postSearchedFor.id) {
-    content = <Card post={postSearchedFor}>
-      <PostInteractions post={postSearchedFor} />
-    </Card>
+  else if (search && postIsSuccess) {
+    content = (
+      <Card post={post}>
+        <PostInteractions post={post} />
+      </Card>
+    )
   }
-  else if (postStatus === 'succeeded') {
-    content = allPosts.slice()
+  else if (isSuccess) {
+    content = sortedPosts
       .map(post =>
         <Card key={post.id} post={post}>
           <PostInteractions post={post} />
         </Card>
       );
   }
-  else if (postStatus === 'failed') {
+  else if (isError) {
     content = <div>{error}</div>;
   }
+
+  const isDisabled = isFetching
+    ? [Styles.card_deck, Styles.disabled].join(" ") : Styles.card_deck;
 
   return (
     <main className={Styles.page_layout}>
       <SearchBar
-        reduxAction={fetchPost}
+        search={search}
+        setSearch={setSearch}
         placeholder="search by ID..."
       />
       <AddPostModal />
-      <section className={Styles.card_deck}>
+      <section className={isDisabled}>
         {content}
       </section>
     </main>

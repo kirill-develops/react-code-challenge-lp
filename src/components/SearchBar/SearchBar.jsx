@@ -1,19 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 
 import Styles from '../../styles/global.module.scss';
 
-const SearchBar = ({ reduxAction, placeholder }) => {
-  // search state & redux variable
-  const [search, setSearch] = useState('');
-
-  // localized dispatch caller of useDispatch hook
-  const dispatch = useDispatch();
-
-  // when the search state changes, dispatch fetchPost with the search state as
-  // a paramater
-  useEffect(() => dispatch(reduxAction(search)),
-    [search, dispatch, reduxAction]);
+const SearchBar = ({ search, setSearch, placeholder }) => {
 
   return (
     <section className={Styles.search_wrapper}>
