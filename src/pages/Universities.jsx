@@ -26,7 +26,7 @@ const Universities = () => {
     countryOptions = <option>Loading...</option>
   }
   else if (countrySuccess) {
-    countryOptions = countries.data.map(country =>
+    countryOptions = countries.map(country =>
       <option key={country.name} value={country.name}>
         {country.name}
       </option>
