@@ -16,12 +16,6 @@ const Home = () => {
     isError,
     error } = useGetAllPostsQuery();
 
-  const sortedPosts = useMemo(() => {
-    const sortedPosts = allPosts.slice();
-    sortedPosts.sort((a, b) => b.id - a.id);
-    return sortedPosts;
-  }, [allPosts]);
-
   // search state & redux variable
   const [search, setSearch] = useState('');
 
@@ -52,7 +46,7 @@ const Home = () => {
     )
   }
   else if (isSuccess) {
-    content = sortedPosts
+    content = allPosts
       .map(post =>
         <Card key={post.id} post={post}>
           <PostInteractions post={post} />

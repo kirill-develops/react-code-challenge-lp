@@ -8,7 +8,10 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     getAllPosts: builder.query({
       query: () => "https://jsonplaceholder.typicode.com/posts",
-      providesTags: (result=[], _error, _arg) => ['Post', ...result.map(({id})=> ({type: 'Post', id}))]
+      transformResponse: responseData => 
+        responseData.sort((a,b)=> b.id - a.id)
+      ,
+      providesTags: (result = [], _error, _arg) => ['Post', ...result.map(({ id }) => ({ type: 'Post', id }))]
     }),
     getOnePost: builder.query({
       query: (id) => `https://jsonplaceholder.typicode.com/posts/${id}`,
