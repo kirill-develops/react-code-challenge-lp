@@ -6,6 +6,12 @@ import Styles from './Nav.module.scss';
 const Nav = () => (
   <div className={Styles.nav}>
     <NavLink
+      to="/"
+      className={({ isActive }) => isActive ? Styles.button_active : Styles.button}
+    >
+      Home
+    </NavLink>
+    <NavLink
       to="/universities"
       className={({ isActive }) => isActive ? Styles.button_active : Styles.button}
     >
