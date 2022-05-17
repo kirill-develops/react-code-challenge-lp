@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Styles from '../styles/global.module.scss';
 import CardStyles from '../components/Card/Card.module.scss';
-import { getAllUniversity } from '../features/university/universitySlice.js';
-import { fetchUniversity } from '../features/university/universityActions.js';
+import { getAllUniversity, useGetUniQuery } from '../features/university/universitySlice.js';
 import { fetchCountries, getAllCountries } from '../features/country/countrySlice';
 
 const Universities = () => {
@@ -12,16 +11,20 @@ const Universities = () => {
 
   const countries = useSelector(getAllCountries);
   const countryStatus = useSelector(state => state.country.status);
-  const error = useSelector(state => state.country.error);
 
   useEffect(() => {
     if (countryStatus === 'idle') dispatch(fetchCountries())
   }, [countryStatus, dispatch])
 
+  const [search, setSearch] = useState('Canada');
+  const onCountryChanged = e => setSearch(e.target.value);
+
   let countryOptions;
   let universityData;
+  const { isFetching, isSuccess, isError, error } = useGetUniQuery(search);
+  const allUni = useSelector(getAllUniversity);
 
-  if (countryStatus === 'loading') {
+  if (countryStatus === 'loading' || isFetching) {
     countryOptions = <option>Loading...</option>
   }
   else if (countryStatus === 'succeeded') {
@@ -35,20 +38,11 @@ const Universities = () => {
     universityData = <div>{error}</div>
   }
 
-  const university = useSelector(getAllUniversity);
-  const [search, setSearch] = useState('Canada');
-  const onCountryChanged = e => setSearch(e.target.value);
 
-  useEffect(() => {
-    if (countryStatus === 'succeeded')
-      dispatch(fetchUniversity(search));
-  }, [search, dispatch, countryStatus])
-
-
-  if (university[0] === 404) {
+  if (isError) {
     universityData = <div>Error fetching. Please refresh page</div>
-  } else if (university[0]) {
-    universityData = university
+  } else if (isSuccess) {
+    universityData = allUni
       .map(uni =>
         <div key={uni.id} className={CardStyles.card} >
           <h1 className=''>

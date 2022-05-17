@@ -1,35 +1,42 @@
-import { createEntityAdapter, createSlice, nanoid } from "@reduxjs/toolkit";
+import { createEntityAdapter, nanoid } from "@reduxjs/toolkit";
+import { apiSlice } from "../api/apiSlice";
 
 
-const universityAdapter = createEntityAdapter({
-  sortComparer: (a, b) => a.name.localeCompare(b.name),
-})
+const universityAdapter = createEntityAdapter({})
 
 const initialState = universityAdapter.getInitialState();
 
-export const universitySlice = createSlice({
-  name: 'university',
-  initialState,
-  reducers: {
-    setUni: (state, action) => {
-      if (action.payload === 404)
-        state.university.error = 'Error... Try refreshing page';
-      else if (action.payload) {
-        let universities;
-
-        universities = action.payload.map(uni => ({
-          ...uni,
-          id: nanoid()
-        }));
-
-        universityAdapter.setAll(state, universities);
+export const extendedApiSlice = apiSlice.injectEndpoints({
+  endpoints: builder => ({
+    getUni: builder.query({
+      query: country => ({
+        url: `http://universities.hipolabs.com/search?country=${country}`,
+      }),
+      transformResponse: responseData => {
+        let resConvert = responseData.slice()
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map(each => {
+            return { ...each, id: nanoid() }
+          });
+        return universityAdapter.setAll(initialState, resConvert)
       }
-    },
-  }
+    }) 
+  })
 });
 
-export default universitySlice.reducer;
+export const { useGetUniQuery } = extendedApiSlice;
 
-export const { setUni } = universitySlice.actions;
+export const { selectAll: getAllUniversity } = universityAdapter
+  .getSelectors(state => {
+  let newObj = {};
 
-export const {selectAll: getAllUniversity } = universityAdapter.getSelectors(state => state.university)
+    for (const value of Object.values(state.api.queries)) { 
+    if (value?.endpointName === 'getUni'
+      && value?.status === 'fulfilled')
+    {
+      newObj = value.data;
+    }
+  }
+  
+    return !Object.values(newObj)[0] ? initialState : newObj;
+})
