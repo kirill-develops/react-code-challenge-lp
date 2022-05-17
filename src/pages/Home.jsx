@@ -1,28 +1,28 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 import Styles from '../styles/global.module.scss';
-import { useGetAllPostsQuery, useGetOnePostQuery } from '../features/api/apiSlice';
+import { getAllPosts, getPostById, useGetAllPostsQuery } from '../features/api/apiSlice';
 import SearchBar from '../components/SearchBar/SearchBar';
 import AddPostModal from '../components/PostModals/AddPostModal';
 import Card from '../components/Card/Card';
 import PostInteractions from '../components/PostInteractions/PostInteractions';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
 
-  const { data: allPosts = [],
+  const {
     isLoading,
     isFetching,
     isSuccess,
     isError,
     error } = useGetAllPostsQuery();
 
+  const allPosts = useSelector(getAllPosts);
+
   // search state & redux variable
   const [search, setSearch] = useState('');
 
-  const { data: post = {},
-    isSuccess: postIsSuccess,
-    isError: postIsError
-  } = useGetOnePostQuery(search);
+  const post = useSelector((state) => getPostById(state, Number(search)));
 
   // create content variable to transform based on API responses
   let content;
@@ -31,14 +31,14 @@ const Home = () => {
     content = (
       <h1>Loading...</h1>);
   }
-  else if (postIsError) {
+  else if (search && !post) {
     content = (
       <div className='card'>
         <h2>No such ID</h2>
       </div>
     )
   }
-  else if (search && postIsSuccess) {
+  else if (search && post) {
     content = (
       <Card post={post}>
         <PostInteractions post={post} />

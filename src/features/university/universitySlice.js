@@ -13,7 +13,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         url: `http://universities.hipolabs.com/search?country=${country}`,
       }),
       transformResponse: responseData => {
-        let resConvert = responseData.slice()
+        const resConvert = responseData.slice()
           .sort((a, b) => a.name.localeCompare(b.name))
           .map(each => {
             return { ...each, id: nanoid() }

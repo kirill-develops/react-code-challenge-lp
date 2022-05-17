@@ -1,4 +1,9 @@
+import { createEntityAdapter } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+const postsAdapter = createEntityAdapter({});
+
+const initialState = postsAdapter.getInitialState();
 
 export const apiSlice = createApi({
   reducerPath: 'api',
@@ -8,10 +13,13 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     getAllPosts: builder.query({
       query: () => "https://jsonplaceholder.typicode.com/posts",
-      transformResponse: responseData => 
-        responseData.sort((a,b)=> b.id - a.id)
+      transformResponse: responseData => {
+        const resConvert = responseData.sort((a, b) => b.id - a.id)
+
+        return postsAdapter.setAll(initialState, resConvert)
+      }
       ,
-      providesTags: (result = [], _error, _arg) => ['Post', ...result.map(({ id }) => ({ type: 'Post', id }))]
+      providesTags: (result = {}, _error, _arg) => ['Post', Object.values(result).map(({ id }) => ({ type: 'Post', id }))]
     }),
     getOnePost: builder.query({
       query: (id) => `https://jsonplaceholder.typicode.com/posts/${id}`,
@@ -23,7 +31,7 @@ export const apiSlice = createApi({
         method: 'post',
         body: postData
       }),
-      invalidatesTags: ['Post']
+      invalidatesTags: (_result, _error, arg) => [{type:'Post', id: arg.id}]
     }),
     editOnePost: builder.mutation({
       query: postData => ({
@@ -47,4 +55,20 @@ export const { useGetAllPostsQuery,
   useGetOnePostQuery,
   useAddOnePostMutation,
   useEditOnePostMutation,
-useDeleteOnePostMutation} = apiSlice;
+  useDeleteOnePostMutation } = apiSlice;
+
+export const { selectAll: getAllPosts, selectById: getPostById } = postsAdapter
+  .getSelectors(state => {
+    let newObj = {};
+
+    if (Object.values(state.api.queries).length > 0) {
+      for (const value of Object.values(state.api.queries)) { 
+        if (value?.endpointName === 'getAllPosts'
+          && value?.status === 'fulfilled') {
+            newObj = value.data;
+        }
+      }
+    }
+
+    return !Object.values(newObj)[0] ? initialState : newObj;
+  })
