@@ -2,7 +2,7 @@ import React, { useReducer, useState } from 'react';
 import { customAlphabet } from 'nanoid';
 
 import Styles from './PostModal.module.scss';
-import { useAddOnePostMutation } from '../../features/api/apiSlice';
+import { useAddOnePostMutation } from '../../slices/apiSlice';
 
 
 const nanoid = customAlphabet('1234567890', 12)

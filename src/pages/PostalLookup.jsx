@@ -2,7 +2,7 @@ import React, { useEffect, useId, useReducer, useState } from 'react';
 
 import CardStyles from '../components/Card/Card.module.scss';
 import GlobalStyles from '../styles/global.module.scss';
-import { useGetZipQuery } from '../features/postal/postalSlice';
+import { useGetZipQuery } from '../slices/postalSlice';
 import SearchBar from '../components/SearchBar/SearchBar';
 
 const PostalLookup = () => {

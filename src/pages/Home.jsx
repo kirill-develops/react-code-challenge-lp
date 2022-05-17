@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import Styles from '../styles/global.module.scss';
-import { getAllPosts, getPostById, useGetAllPostsQuery } from '../features/api/apiSlice';
+import { getAllPosts, getPostById, useGetAllPostsQuery } from '../slices/apiSlice';
 import SearchBar from '../components/SearchBar/SearchBar';
 import AddPostModal from '../components/PostModals/AddPostModal';
 import Card from '../components/Card/Card';

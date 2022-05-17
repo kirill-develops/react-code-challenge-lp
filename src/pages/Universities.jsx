@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 
 import Styles from '../styles/global.module.scss';
 import CardStyles from '../components/Card/Card.module.scss';
-import { getAllUniversity, useGetUniQuery } from '../features/university/universitySlice.js';
-import { useGetCountriesQuery } from '../features/country/countrySlice';
+import { getAllUniversity, useGetUniQuery } from '../slices/universitySlice.js';
+import { useGetCountriesQuery } from '../slices/universitySlice';
 
 const Universities = () => {
 

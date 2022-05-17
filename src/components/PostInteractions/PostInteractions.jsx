@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 
-import { useDeleteOnePostMutation } from '../../features/api/apiSlice';
+import { useDeleteOnePostMutation } from '../../slices/apiSlice';
 import Styles from './PostInteractions.module.scss';
 import EditPostModal from '../PostModals/EditPostModal';
 

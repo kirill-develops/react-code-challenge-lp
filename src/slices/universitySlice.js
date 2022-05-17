@@ -1,5 +1,5 @@
 import { createEntityAdapter, nanoid } from "@reduxjs/toolkit";
-import { apiSlice } from "../api/apiSlice";
+import { apiSlice } from "./apiSlice";
 
 
 const universityAdapter = createEntityAdapter({})
@@ -8,6 +8,10 @@ const initialState = universityAdapter.getInitialState();
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
+    getCountries: builder.query({
+      query: () => ('https://countriesnow.space/api/v0.1/countries/info?returns=none'),
+      transformResponse: resData => resData.data.sort((a, b) => a.name.localeCompare(b.name))
+    }),
     getUni: builder.query({
       query: country => ({
         url: `http://universities.hipolabs.com/search?country=${country}`,
@@ -24,7 +28,9 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
   })
 });
 
-export const { useGetUniQuery } = extendedApiSlice;
+export const {
+  useGetCountriesQuery,
+  useGetUniQuery } = extendedApiSlice;
 
 export const { selectAll: getAllUniversity } = universityAdapter
   .getSelectors(state => {
