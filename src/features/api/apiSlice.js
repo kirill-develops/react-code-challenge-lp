@@ -37,7 +37,9 @@ export const apiSlice = createApi({
         method: 'post',
         body: postData
       }),
-      invalidatesTags: (_result, _error, arg) => [{type:'Post', id: arg.id}, { type: 'Post', id: 'LIST' }]
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Post', id: arg.id },
+        { type: 'Post', id: 'LIST' }]
     }),
     editOnePost: builder.mutation({
       query: postData => ({

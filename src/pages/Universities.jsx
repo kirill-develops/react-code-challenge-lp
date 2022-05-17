@@ -1,43 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Styles from '../styles/global.module.scss';
 import CardStyles from '../components/Card/Card.module.scss';
 import { getAllUniversity, useGetUniQuery } from '../features/university/universitySlice.js';
-import { fetchCountries, getAllCountries } from '../features/country/countrySlice';
+import { useGetCountriesQuery } from '../features/country/countrySlice';
 
 const Universities = () => {
-  const dispatch = useDispatch();
 
-  const countries = useSelector(getAllCountries);
-  const countryStatus = useSelector(state => state.country.status);
-
-  useEffect(() => {
-    if (countryStatus === 'idle') dispatch(fetchCountries())
-  }, [countryStatus, dispatch])
+  const { data: countries,
+    isLoading: countryLoading,
+    isSuccess: countrySuccess,
+    isError: countryError,
+    error: countryErrorMsg } = useGetCountriesQuery();
 
   const [search, setSearch] = useState('Canada');
-  const onCountryChanged = e => setSearch(e.target.value);
+
+  const { isFetching, isSuccess, isError } = useGetUniQuery(search);
+  const allUni = useSelector(getAllUniversity);
 
   let countryOptions;
   let universityData;
-  const { isFetching, isSuccess, isError, error } = useGetUniQuery(search);
-  const allUni = useSelector(getAllUniversity);
 
-  if (countryStatus === 'loading' || isFetching) {
+  if (countryLoading) {
     countryOptions = <option>Loading...</option>
   }
-  else if (countryStatus === 'succeeded') {
-    countryOptions = countries.map(country =>
+  else if (countrySuccess) {
+    countryOptions = countries.data.map(country =>
       <option key={country.name} value={country.name}>
         {country.name}
       </option>
     );
   }
-  else if (countryStatus === 'failed') {
-    universityData = <div>{error}</div>
+  else if (countryError) {
+    universityData = <div>
+      <p>Fetch Error, Please Reload</p>
+      <p>
+        Error message: {JSON.stringify(countryErrorMsg)}
+      </p>
+    </div>
   }
-
 
   if (isError) {
     universityData = <div>Error fetching. Please refresh page</div>
@@ -53,19 +55,26 @@ const Universities = () => {
       )
   }
 
-  return countryStatus === 'loading' ? (<div>Loading</div>) : (
+  const isDisabled = isFetching
+    ? [Styles.card_deck, Styles.disabled].join(" ") : Styles.card_deck;
+
+  const onCountryChanged = e => setSearch(e.target.value);
+
+  return countryLoading ? (
+    <div>Loading</div>
+  ) : (
     <main className={Styles.page_layout}>
       <section className={Styles.search_wrapper}>
         <select
           value={search}
           onChange={onCountryChanged}
-          disabled={countryStatus !== "succeeded"}
+          disabled={!countrySuccess}
         >
           <option value="" disabled>Select Country</option>
           {countryOptions}
         </select>
       </section>
-      <section className={Styles.card_deck}>
+      <section className={isDisabled}>
         {universityData}
       </section>
     </main>
