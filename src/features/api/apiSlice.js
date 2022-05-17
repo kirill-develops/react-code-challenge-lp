@@ -5,11 +5,22 @@ const postsAdapter = createEntityAdapter({});
 
 const initialState = postsAdapter.getInitialState();
 
+
+function providesList(resultsWithIds, tagType) {
+  return resultsWithIds
+    ? [
+        { type: tagType, id: 'LIST' },
+        ...resultsWithIds.map(({ id }) => ({ type: tagType, id })),
+      ]
+    : [{ type: tagType, id: 'LIST' }]
+}
+
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     baseUrl: ""
   }),
+  tagTypes: ['Post'],
   endpoints: (builder) => ({
     getAllPosts: builder.query({
       query: () => "https://jsonplaceholder.typicode.com/posts",
@@ -17,13 +28,8 @@ export const apiSlice = createApi({
         const resConvert = responseData.sort((a, b) => b.id - a.id)
 
         return postsAdapter.setAll(initialState, resConvert)
-      }
-      ,
-      providesTags: (result = {}, _error, _arg) => ['Post', Object.values(result).map(({ id }) => ({ type: 'Post', id }))]
-    }),
-    getOnePost: builder.query({
-      query: (id) => `https://jsonplaceholder.typicode.com/posts/${id}`,
-      providesTags: (_result, _error, arg) => [{type:'Post', id:arg}]
+      },
+      providesTags: (result) => providesList(result.ids, 'Post'),
     }),
     addOnePost: builder.mutation({
       query: (postData) => ({
@@ -31,7 +37,7 @@ export const apiSlice = createApi({
         method: 'post',
         body: postData
       }),
-      invalidatesTags: (_result, _error, arg) => [{type:'Post', id: arg.id}]
+      invalidatesTags: (_result, _error, arg) => [{type:'Post', id: arg.id}, { type: 'Post', id: 'LIST' }]
     }),
     editOnePost: builder.mutation({
       query: postData => ({
@@ -39,14 +45,14 @@ export const apiSlice = createApi({
         method: 'put',
         body: postData
       }),
-      invalidatesTags: (_result, _error, arg) => [{type:'Post', id: arg.id}]
+      invalidatesTags: (_result, _error, arg) => [{ type: 'Post', id: arg.id }]
     }),
     deleteOnePost: builder.mutation({
       query: postId => ({
         url: `https://jsonplaceholder.typicode.com/posts/${postId}`,
         method: 'delete',
       }),
-      invalidatesTags: (_result, _error, arg) =>[{type:'Post', id: arg}]
+      invalidatesTags: (_result, _error, arg) => [{ type: 'Post', id: arg }]
     })
   })
 });
