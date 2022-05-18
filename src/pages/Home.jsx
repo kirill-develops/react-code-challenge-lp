@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import { useSelector } from 'react-redux';
 
 import Styles from '../styles/global.module.scss';
@@ -20,7 +20,15 @@ const Home = () => {
   const allPosts = useSelector(getAllPosts);
 
   // search state & redux variable
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useReducer((state, action) => {
+    if (!action) {
+      return '';
+    }
+    else if (!Number(action)) {
+      return state;
+    }
+    return action;
+  }, '');
 
   const post = useSelector((state) => getPostById(state, +search));
 
