@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 
 import { useDeleteOnePostMutation } from '../../slices/apiSlice';
 import Styles from './PostInteractions.module.scss';
-import EditPostModal from '../PostModals/EditPostModal';
+import PostModal from '../PostModals/PostModal';
 
 const PostInteractions = ({ post }) => {
 
@@ -22,9 +22,10 @@ const PostInteractions = ({ post }) => {
 
   const editPostModalOutlet = (
     editPost
-    && <EditPostModal
+    && <PostModal
       post={post}
-      toggleEditPost={toggleEditPost}
+      togglePost={toggleEditPost}
+      modalType='edit'
     />
   )
 

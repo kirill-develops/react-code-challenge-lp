@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Styles from '../styles/global.module.scss';
 import { getAllPosts, getPostById, useGetAllPostsQuery } from '../slices/apiSlice';
-import SearchBar from '../components/SearchBar/SearchBar';
-import AddPostModal from '../components/PostModals/AddPostModal';
 import Card from '../components/Card/Card';
+import CreatePostButton from '../components/PostModals/CreatePostButton';
 import PostInteractions from '../components/PostInteractions/PostInteractions';
-import { useSelector } from 'react-redux';
+import SearchBar from '../components/SearchBar/SearchBar';
 
 const Home = () => {
 
@@ -22,7 +22,7 @@ const Home = () => {
   // search state & redux variable
   const [search, setSearch] = useState('');
 
-  const post = useSelector((state) => getPostById(state, Number(search)));
+  const post = useSelector((state) => getPostById(state, +search));
 
   // create content variable to transform based on API responses
   let content;
@@ -67,7 +67,7 @@ const Home = () => {
         setSearch={setSearch}
         placeholder="search by ID..."
       />
-      <AddPostModal />
+      <CreatePostButton />
       <section className={isDisabled}>
         {content}
       </section>

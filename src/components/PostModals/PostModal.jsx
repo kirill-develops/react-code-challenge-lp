@@ -2,44 +2,53 @@ import React, { useState } from 'react';
 import { customAlphabet } from 'nanoid';
 
 import Styles from './PostModal.module.scss';
-import { useEditOnePostMutation } from '../../slices/apiSlice';
+import { useAddOnePostMutation, useEditOnePostMutation } from '../../slices/apiSlice';
 
 
 const nanoid = customAlphabet('1234567890', 12);
 
-const EditPostModal = ({ post, toggleEditPost }) => {
-  const [title, setTitle] = useState(post.title);
-  const [content, setContent] = useState(post.body);
 
-  const [editPost, { isLoading }] = useEditOnePostMutation();
+const PostModal = ({ post = {},
+  togglePost,
+  modalType = 'add' }) => {
+  const [title, setTitle] = useState(post?.title || '');
+  const [content, setContent] = useState(post?.body || '');
+
+  const [addNewPost, { isLoading: addPostLoading }] = useAddOnePostMutation();
+  const [editPost, { isLoading: editPostLoading }] = useEditOnePostMutation();
 
   // boolean variable representing if the title and content are appropriate lengths
-  const canSave = Boolean(title.length > 2) && Boolean(content.length > 4) && !isLoading;
+  const canSave = Boolean(title.length > 2)
+    && Boolean(content.length > 4)
+    && !addPostLoading && !editPostLoading;
 
   const onSubmit = async () => {
-
     if (canSave) {
       const postObj = {
-        id: post.id,
+        ...(modalType === 'edit' && { id: post.id }),
         title: title,
         body: content,
         userId: nanoid(),
       };
       try {
-        await editPost(postObj).unwrap()
+        modalType === 'edit'
+          ? await editPost(postObj).unwrap() : await addNewPost(postObj).unwrap();
         setTitle('');
         setContent('');
-        toggleEditPost();
+        togglePost();
       } catch (err) {
         console.error('failed to update the post: ', err)
       }
     }
   }
 
+  const postTitle = modalType === 'edit' ? <h2>Edit this Post</h2> : <h2>Add a New Post</h2>;
+  const isDisabled = addPostLoading || editPostLoading;
+
   return (
     <section className={Styles.overlay}>
       <div className={Styles.modal}>
-        <h2>Edit this Post</h2>
+        {postTitle}
         <form className={Styles.form}>
           <label htmlFor="postTitle">
             Post Title:</label>
@@ -49,7 +58,7 @@ const EditPostModal = ({ post, toggleEditPost }) => {
             name="postTitle"
             value={title}
             onChange={e => setTitle(e.target.value)}
-            disabled={isLoading}
+            disabled={isDisabled}
           />
           <label htmlFor="postContent">
             Content:</label>
@@ -58,7 +67,7 @@ const EditPostModal = ({ post, toggleEditPost }) => {
             name="postContent"
             value={content}
             onChange={e => setContent(e.target.value)}
-            disabled={isLoading}
+            disabled={isDisabled}
             className={Styles.input__large}
           />
           <button
@@ -69,8 +78,8 @@ const EditPostModal = ({ post, toggleEditPost }) => {
           >Save Post</button>
           <button
             type="button"
-            onClick={toggleEditPost}
-            disabled={isLoading}
+            onClick={togglePost}
+            disabled={isDisabled}
             className={Styles.button}
           >Cancel</button>
         </form>
@@ -79,4 +88,4 @@ const EditPostModal = ({ post, toggleEditPost }) => {
   )
 }
 
-export default React.memo(EditPostModal);
+export default React.memo(PostModal);
