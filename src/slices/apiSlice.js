@@ -1,10 +1,30 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { retry } from '@reduxjs/toolkit/dist/query';
 
 const postsAdapter = createEntityAdapter({});
 
 const initialState = postsAdapter.getInitialState();
 
+const staggeredBaseQuery = retry(
+  async (args, api, extraOptions) => {
+    const result = await fetchBaseQuery({ baseUrl: '' })(
+      args,
+      api,
+      extraOptions
+    )
+
+    // bail out of re-tries immediately if unauthorized,
+    // because we know successive re-retries would be redundant
+    if (result.error?.status === 401) {
+      retry.fail(result.error)
+    }
+
+    return result
+  },
+  {
+    maxRetries: 5,
+  })
 
 function providesList(resultsWithIds, tagType) {
   return resultsWithIds
@@ -17,9 +37,7 @@ function providesList(resultsWithIds, tagType) {
 
 export const apiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({
-    baseUrl: ""
-  }),
+  baseQuery: staggeredBaseQuery,
   tagTypes: ['Post'],
   endpoints: (builder) => ({
     getAllPosts: builder.query({
