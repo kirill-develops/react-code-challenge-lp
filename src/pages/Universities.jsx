@@ -89,6 +89,7 @@ const Universities = () => {
           value={countrySearch}
           onChange={onCountryChanged}
           disabled={!countrySuccess}
+          className={Styles.search}
         >
           <option value="" disabled default>Select Country</option>
           {countryOptions}
