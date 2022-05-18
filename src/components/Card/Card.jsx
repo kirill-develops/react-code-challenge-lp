@@ -4,9 +4,9 @@ import Styles from './Card.module.scss';
 
 const Card = ({ post, children }) => (
   <div className={Styles.card}>
-    <h1 className={Styles.title}>
+    <h3 className={Styles.title}>
       {post.title}
-    </h1>
+    </h3>
     <div className={Styles.body_wrapper}>
       <p className={Styles.body}>
         {post.body}
@@ -14,7 +14,7 @@ const Card = ({ post, children }) => (
       <div className={Styles.metrics}>
         {children}
         <p className={Styles.label}>
-          post id number:{post.id}
+          post ID:{post.id}
         </p>
       </div>
     </div>
