@@ -19,8 +19,8 @@ const Home = () => {
 
   const allPosts = useSelector(getAllPosts);
 
-  // search state & redux variable
-  const [search, setSearch] = useReducer((state, action) => {
+  // search state
+  const [searchId, setSearchId] = useReducer((state, action) => {
     if (!action) {
       return '';
     }
@@ -30,7 +30,8 @@ const Home = () => {
     return action;
   }, '');
 
-  const post = useSelector((state) => getPostById(state, +search));
+  // data results from search by Id from Redux store
+  const post = useSelector((state) => getPostById(state, +searchId));
 
   // create content variable to transform based on API responses
   let content;
@@ -39,18 +40,16 @@ const Home = () => {
     content = (
       <h1>Loading...</h1>);
   }
-  else if (search && !post) {
-    content = (
-      <div className='card'>
-        <h2>No such ID</h2>
-      </div>
-    )
-  }
-  else if (search && post) {
-    content = (
+  else if (searchId) {
+    //Based on search results, either produce formated data or error message
+    content = post ? (
       <Card post={post}>
         <PostInteractions post={post} />
       </Card>
+    ) : (
+      <div className='card'>
+        <h2>No such ID</h2>
+      </div>
     )
   }
   else if (isSuccess) {
@@ -71,8 +70,8 @@ const Home = () => {
   return (
     <main className={Styles.page_layout}>
       <SearchBar
-        search={search}
-        setSearch={setSearch}
+        search={searchId}
+        setSearch={setSearchId}
         placeholder="search by ID..."
       />
       <CreatePostButton />
