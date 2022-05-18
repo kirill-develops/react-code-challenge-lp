@@ -17,22 +17,32 @@ const PostalLookup = () => {
     return action;
   }, '');
   const [validSearch, setValidSearch] = useState(search);
+  const [skip, setSkip] = useState(true);
 
   // whenever the search is equal to 5 numbers
   useEffect(() => {
-    (search.length === 5) && setValidSearch(search)
+    if (search.length === 5) {
+      setValidSearch(search);
+      setSkip(false);
+    }
+    else setSkip(true);
   }, [search])
 
   const { data: zipData,
+    isLoading,
     isFetching,
     isSuccess,
-    isError } = useGetZipQuery(validSearch)
+    isUninitialized,
+    isError } = useGetZipQuery(validSearch, { skip, })
 
+  let content = <hr></hr>;
 
-  let content;
-
-  if (search.length === 5 && isError) {
-    content = <h2>No Such zip code could be found</h2>
+  if (isUninitialized) {
+    content = <h1>Please enter a valid Zip Code</h1>
+  } else if (isError) {
+    content = <h1>No Such zip code could be found</h1>
+  } else if (isLoading) {
+    content = <h1>Loading...</h1>
   }
   else if (isSuccess) {
     const { places: result } = zipData;
@@ -42,15 +52,15 @@ const PostalLookup = () => {
 
     content =
       <section className={isDisabled}>
-        <h2 className=''>Results For Zip Code: {zipData['post code']}</h2>
+        <h1 className=''>Results For Zip Code: {zipData['post code']}</h1>
         {result.map(each =>
           <div key={useId} className={CardStyles.card__multi_row}>
             <h2 className={CardStyles.title}>
               {each['place name']}, {each['state abbreviation']}
             </h2>
             <p className="">State: {each.state}</p>
-            <h3 className={CardStyles.label}>Latitude: {each.latitude}</h3>
-            <h3 className={CardStyles.label}> Longitude: {each.longitude}</h3>
+            <h4 className={CardStyles.label}>Latitude: {each.latitude}</h4>
+            <h4 className={CardStyles.label}> Longitude: {each.longitude}</h4>
           </div>
         )}
       </section>
