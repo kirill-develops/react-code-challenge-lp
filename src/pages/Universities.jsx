@@ -5,6 +5,7 @@ import Styles from '../styles/global.module.scss';
 import CardStyles from '../components/Card/Card.module.scss';
 import { getAllUniversity, useGetUniQuery } from '../slices/universitySlice.js';
 import { useGetCountriesQuery } from '../slices/universitySlice';
+import SearchBar from '../components/SearchBar/SearchBar';
 
 const Universities = () => {
 
@@ -14,9 +15,14 @@ const Universities = () => {
     isError: countryError,
     error: countryErrorMsg } = useGetCountriesQuery();
 
-  const [search, setSearch] = useState('Canada');
+  const [countrySearch, setCountrySearch] = useState('');
+  const [uniSearch, setUniSearch] = useState('');
+  const [skip, setSkip] = useState(true);
 
-  const { isFetching, isSuccess, isError } = useGetUniQuery(search);
+  const { isFetching,
+    isSuccess,
+    isUninitialized,
+    isError } = useGetUniQuery(countrySearch, { skip });
   const allUni = useSelector(getAllUniversity);
 
   let countryOptions;
@@ -41,15 +47,19 @@ const Universities = () => {
     </div>
   }
 
-  if (isError) {
-    universityData = <div>Error fetching. Please refresh page</div>
+  if (isUninitialized) {
+    universityData = <h1>Use the drop down menu to generate all Post Secondary options withen your selection</h1>
+  } else if (isError) {
+    universityData = <h1>Error fetching. Please refresh page</h1>
   } else if (isSuccess) {
     universityData = allUni
+      .filter(uni => uni.name.toLowerCase()
+        .startsWith(uniSearch.toLowerCase()))
       .map(uni =>
         <div key={uni.id} className={CardStyles.card} >
-          <h1 className=''>
+          <h2 className=''>
             {uni.name}
-          </h1>
+          </h2>
           <a href={uni.web_pages[0]} >{uni.web_pages[0]}</a>
         </div>
       )
@@ -58,22 +68,33 @@ const Universities = () => {
   const isDisabled = isFetching
     ? [Styles.card_deck, Styles.disabled].join(" ") : Styles.card_deck;
 
-  const onCountryChanged = e => setSearch(e.target.value);
+  const onCountryChanged = e => {
+    setCountrySearch(e.target.value);
+    setSkip(false);
+  };
+
+  const showSearch = !isUninitialized
+    && <SearchBar
+      search={uniSearch}
+      setSearch={setUniSearch}
+      placeholder="search results..."
+    />
 
   return countryLoading ? (
-    <div>Loading</div>
+    <h1>Loading...</h1>
   ) : (
     <main className={Styles.page_layout}>
       <section className={Styles.search_wrapper}>
         <select
-          value={search}
+          value={countrySearch}
           onChange={onCountryChanged}
           disabled={!countrySuccess}
         >
-          <option value="" disabled>Select Country</option>
+          <option value="" disabled default>Select Country</option>
           {countryOptions}
         </select>
       </section>
+      {showSearch}
       <section className={isDisabled}>
         {universityData}
       </section>
