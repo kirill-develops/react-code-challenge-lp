@@ -1,3 +1,4 @@
+@use './breakpoints'as*;
 @use './mixins'as*;
 @use './variables'as*;
 
@@ -32,9 +33,54 @@ body {
 a {
   text-decoration: none;
   color: initial;
+  font-size: 0.85rem;
+
+  @include tablet {
+    font-size: 1rem;
+  }
 
   &:hover {
     text-decoration: underline;
+  }
+}
+
+h1 {
+  font-size: 1.3rem;
+
+  @include tablet {
+    font-size: 1.5rem;
+  }
+}
+
+h2 {
+  font-size: 1.17rem;
+
+  @include tablet {
+    font-size: 1.3rem;
+  }
+}
+
+h3 {
+  font-size: 1rem;
+
+  @include tablet {
+    font-size: 1.17rem;
+  }
+}
+
+h4 {
+  font-size: 0.85rem;
+
+  @include tablet {
+    font-size: 1rem;
+  }
+}
+
+p {
+  font-size: 0.85rem;
+
+  @include tablet {
+    font-size: 1rem;
   }
 }
 
@@ -55,6 +101,13 @@ a {
   flex-direction: column;
   align-items: center;
   gap: $padding-xl;
+
+  @include desktop {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
 }
 
 .search_wrapper {
@@ -64,6 +117,18 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.search {
+  width: fit-content;
+  @include padding-small;
+  border-radius: $brdr-radius-medium;
+  border: none;
+  outline: 1px solid rgb(127, 127, 127);
+
+  &::placeholder {
+    font-size: 0.8rem;
+  }
 }
 
 .disabled {

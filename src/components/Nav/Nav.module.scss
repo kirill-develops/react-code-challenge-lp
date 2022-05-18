@@ -12,9 +12,9 @@
 }
 
 .button {
-  @include padding-medium;
+  @include padding-small;
   border: 1.5px solid white;
-  border-radius: $brdr-radius-large;
+  border-radius: $brdr-radius-medium;
   color: white;
   text-transform: uppercase;
 
