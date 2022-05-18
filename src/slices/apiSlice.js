@@ -81,7 +81,8 @@ export const { useGetAllPostsQuery,
   useGetOnePostQuery,
   useAddOnePostMutation,
   useEditOnePostMutation,
-  useDeleteOnePostMutation } = apiSlice;
+  useDeleteOnePostMutation,
+  usePrefetch } = apiSlice;
 
 export const { selectAll: getAllPosts, selectById: getPostById } = postsAdapter
   .getSelectors(state => {
