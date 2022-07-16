@@ -25,13 +25,10 @@ const Universities = () => {
     isError } = useGetUniQuery(countrySearch, { skip });
   const allUni = useSelector(getAllUniversity);
 
-  let countryOptions;
+  let countryOptions = <option>Loading...</option>;
   let universityData;
 
-  if (countryLoading) {
-    countryOptions = <option>Loading...</option>
-  }
-  else if (countrySuccess) {
+  if (countrySuccess) {
     countryOptions = countries.map(country =>
       <option key={country.name} value={country.name}>
         {country.name}

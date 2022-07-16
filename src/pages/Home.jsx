@@ -61,7 +61,7 @@ const Home = () => {
       );
   }
   else if (isError) {
-    content = <div>{error}</div>;
+    content = <div>{JSON.stringify(error)}</div>;
   }
 
   const isDisabled = isFetching

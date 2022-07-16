@@ -1,6 +1,6 @@
 // Media Breakpoints
 $tablet-breakpoint: 48rem;
-$desktop-breakpoint: 64rem;
+$desktop-breakpoint: 56rem;
 
 @mixin tablet {
   @media screen and (min-width: $tablet-breakpoint) {

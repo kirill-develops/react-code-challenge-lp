@@ -48,11 +48,11 @@ const PostalLookup = () => {
     const { places: result } = zipData;
 
     const isDisabled = isFetching
-      ? [GlobalStyles.card_deck, GlobalStyles.disabled].join(" ") : GlobalStyles.card_deck;
+      ? [GlobalStyles.card_deck__postal, GlobalStyles.disabled].join(" ") : GlobalStyles.card_deck__postal;
 
     content =
       <section className={isDisabled}>
-        <h1 className=''>Results For Zip Code: {zipData['post code']}</h1>
+        <h1 className={CardStyles.label}>Results For Zip Code: {zipData['post code']}</h1>
         {result.map(each =>
           <div key={useId} className={CardStyles.card__multi_row}>
             <h2 className={CardStyles.title}>
