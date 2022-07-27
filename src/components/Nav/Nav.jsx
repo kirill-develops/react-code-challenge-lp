@@ -11,7 +11,7 @@ const Nav = () => {
   return (
     <div className={Styles.nav}>
       <NavLink
-        exact to="/react-code-challenge-lp/"
+        exact to="/"
         onMouseEnter={() => prefetchPosts()}
         className={({ isActive }) => isActive
           ? Styles.button_active : Styles.button}
@@ -19,7 +19,7 @@ const Nav = () => {
         Home
       </NavLink>
       <NavLink
-        to="/react-code-challenge-lp/universities"
+        to="/universities"
         onMouseEnter={() => prefetchCountries()}
         className={({ isActive }) => isActive
           ? Styles.button_active : Styles.button}
@@ -27,7 +27,7 @@ const Nav = () => {
         Universities
       </NavLink>
       <NavLink
-        to="/react-code-challenge-lp/postal-lookup"
+        to="/postal-lookup"
         className={({ isActive }) => isActive
           ? Styles.button_active : Styles.button}
       >
