@@ -14,7 +14,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
     }),
     getUni: builder.query({
       query: country => ({
-        url: `http://universities.hipolabs.com/search?country=${country}`,
+        url: `https://universities.hipolabs.com/search?country=${country}`,
       }),
       transformResponse: responseData => {
         const resConvert = responseData.slice()

@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Take-Home Code Assessment",
+  "name": "A Take-Home code assessment practicing Redux essentials",
   "icons": [
     {
       "src": "favicon.ico",

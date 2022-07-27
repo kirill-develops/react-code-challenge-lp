@@ -62,8 +62,7 @@ const Universities = () => {
       )
   }
 
-  const isDisabled = isFetching
-    ? [Styles.card_deck, Styles.disabled].join(" ") : Styles.card_deck;
+  const isDisabled = isFetching ? [Styles.card_deck, Styles.disabled].join(" ") : Styles.card_deck;
 
   const onCountryChanged = e => {
     setCountrySearch(e.target.value);

@@ -10,15 +10,15 @@ const App = () => (
       <Nav />
       <Routes>
         <Route
-          path='/'
+          path='/react-code-challenge-lp/'
           element={(<Home />)}
         />
         <Route
-          path='/universities'
+          path='/react-code-challenge-lp/universities'
           element={(<Universities />)}
         />
          <Route
-          path='/postal-lookup'
+          path='/react-code-challenge-lp/postal-lookup'
           element={(<PostalLookup />)}
         />
       </Routes>
